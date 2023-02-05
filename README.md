@@ -16,7 +16,7 @@ Exécuter, dans le dossier `src\main\resources` où l'archive `h2-1.4.200.jar` e
 
 ``java -cp h2-1.4.200.jar org.h2.tools.Server -ifNotExists``
 
-Si tout va bien, cela une fenêtre sur la console H2 doit s'ouvrir. Si ce n'est pas le cas, vous pouvez accéder à la console en allant sur [http://localhost:8082](http://localhost:8082) .
+Si tout va bien, cela une fenêtre sur la console H2 doit s'ouvrir. Si ce n'est pas le cas, vous pouvez accéder à la console en allant sur [http://localhost:8082](http://localhost:8082/) .
 
 <h3>Configurer le serveur et la console H2 dans IntelliJ</h3>
 
@@ -35,7 +35,8 @@ Cette interface est utile pour tester vos **API REST** et les documenter.
     <li>Spring Boot In Action ;</li>
     <li>Java Persistence with Hibernate, 2nd Edition ;</li>
     <li><a href="https://docs.spring.io/spring-boot/docs/current/reference/html/application-properties.html">Application properties file documentation</a> ;
-    <li><a href="https://projectlombok.org/features/">Lombok Project documentation</a>.</li>
+    <li><a href="https://projectlombok.org/features/">Lombok Project documentation</a> ;</li>
+    <li><a href="https://docs.spring.io/spring-security/site/docs/4.2.3.RELEASE/reference/htmlsingle/">Spring Security documentation</a>.</li>
 </ul>
 
 <h1>Structure du processus d'intégration</h1>
@@ -46,6 +47,7 @@ Cette interface est utile pour tester vos **API REST** et les documenter.
 
 [description optionnelle]
 ```
+
 <h3>Type</h3>
 Le type du commit décrit l’origine du changement :
 <ul>
