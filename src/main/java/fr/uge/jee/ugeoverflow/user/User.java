@@ -28,6 +28,7 @@ public class User {
 
     @NotBlank(message = "Email is mandatory")
     @Email
+    @Column(unique = true)
     private String email;
 
     @Enumerated(EnumType.STRING)

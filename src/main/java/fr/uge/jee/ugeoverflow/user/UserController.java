@@ -6,22 +6,21 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.IOException;
+import javax.validation.constraints.NotEmpty;
 import java.util.Collections;
 
 @Controller
 @RequestMapping("/registration")
 public class UserController {
-    private UserRepository userRepository;
+    private UserService userService;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
-
 
     @GetMapping("/register")
     public String userForm(User user) {
-        return "user-form";
+        return "registration-form";
     }
 
     @PostMapping("/register")
@@ -30,15 +29,37 @@ public class UserController {
                               Model model) {
 
         if (bindingResult.hasErrors()) {
-            return "user-form";
+            return "registration-form";
         }
         user.setConfidenceScore(0L);
         user.setFollowedUsers(Collections.emptySet());
         user.setRole(Role.AUTHENTIFIED);
-        this.userRepository.save(user);
-        User savedUser = this.userRepository.findUserByUsername(user.getUsername());
+        this.userService.save(user);
+        User savedUser = this.userService.findUserByUsername(user.getUsername());
         model.addAttribute("user", savedUser);
 
         return "user-registration";
     }
+
+    @GetMapping("/login")
+    public String loginForm() {
+        return "login-form";
+    }
+
+    @PostMapping("/login")
+    public String processLogin(@RequestParam(name = "username") @NotEmpty String username,
+                              @RequestParam(name = "password") @NotEmpty String password,
+                               Model model) {
+
+        User user = this.userService.findUserByUsername(username);
+        if (user != null && user.getPassword().equals(password)) {
+            model.addAttribute("loggedUser", user);
+            return "home-page";
+        }
+
+        model.addAttribute("loginError", "Username or password is incorrect");
+
+        return "login-form";
+    }
+
 }
