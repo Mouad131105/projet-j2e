@@ -1,5 +1,8 @@
-package fr.uge.jee.ugeoverflow.user;
+package fr.uge.jee.ugeoverflow.controller;
 
+import fr.uge.jee.ugeoverflow.entities.Role;
+import fr.uge.jee.ugeoverflow.entities.User;
+import fr.uge.jee.ugeoverflow.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

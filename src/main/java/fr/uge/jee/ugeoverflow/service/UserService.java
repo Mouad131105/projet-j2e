@@ -1,5 +1,7 @@
-package fr.uge.jee.ugeoverflow.user;
+package fr.uge.jee.ugeoverflow.service;
 
+import fr.uge.jee.ugeoverflow.entities.User;
+import fr.uge.jee.ugeoverflow.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;

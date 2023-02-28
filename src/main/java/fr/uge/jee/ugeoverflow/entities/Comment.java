@@ -1,6 +1,5 @@
 package fr.uge.jee.ugeoverflow.entities;
 
-import fr.uge.jee.ugeoverflow.user.User;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
