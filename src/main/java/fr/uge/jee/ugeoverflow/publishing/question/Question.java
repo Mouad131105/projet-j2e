@@ -1,6 +1,6 @@
 package fr.uge.jee.ugeoverflow.publishing.question;
 
-import fr.uge.jee.ugeoverflow.publishing.Tag;
+import fr.uge.jee.ugeoverflow.entities.Tag;
 import fr.uge.jee.ugeoverflow.user.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
