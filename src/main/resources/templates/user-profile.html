@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+
+
+    <h1 th:text="${'Welcome to ' + user.username + ' profile'}"></h1>
+
+    <div>
+        <p th:text="${'Role : ' + user.getRole()}"> </p>
+        <p th:text="${'Confidence score : ' + user.confidenceScore}"> </p>
+    </div>
+
+
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th> Question asked by this user </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${questions.isEmpty()}">
+                <td colspan="2"> This user as not asked any questions </td>
+            </tr>
+            <tr th:each="question : ${questions}">
+                <td title="Tags" th:each="tag : ${question.tags}">
+                    <span th:text="${tag}"></span>
+                </td>
+                <td>
+                    <span th:text="${question.topic}"> Topic </span>
+                </td>
+                <td>
+                    <span th:text="${question.content}"> Content </span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</html>
