@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<form th:action="@{/question/create}" th:object="${question}" method="post">
+    <h2>Question register</h2>
+
+    <div>
+        <input type ="hidden" th:field="${question.author}" th:value="${loggedUser}" />
+    </div>
+
+    <div>
+        <label for="topic">topic:</label>
+        <input id="topic" th:field="${question.topic}" type="text" name="topic">
+        <th:block th:if="${#fields.hasErrors('topic')}" th:errors="${question.topic}"></th:block>
+    </div>
+
+    <div>
+        <label for="content">content:</label>
+        <input id="content" th:field="${question.content}" type="text" name="content">
+        <th:block th:if="${#fields.hasErrors('content')}" th:errors="${question.content}"></th:block>
+    </div>
+
+
+    <div>
+        <label for="tags">tags:</label>
+        <select id="tags" th:field="${question.tags}" name="tags">
+            <option selected disabled hidden style='display: none' value=''></option>
+            <option th:each="tag : ${allTags}" th:value="${tag.toString()}" th:text="${tag.toString()}">
+            </option>
+        </select>
+    </div>
+
+    <div>
+        <button type="submit">New Question</button>
+    </div>
+</form>
+
+</html>
