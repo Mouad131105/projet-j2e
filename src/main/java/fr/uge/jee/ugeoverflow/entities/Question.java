@@ -18,12 +18,13 @@ import java.util.Set;
 public class Question {
     @GeneratedValue
     @Id
-    private long id;
+    private Long id;
 
-    @NotBlank
+    /*@NotBlank
     @ManyToOne
-    private User author;
+    private User author;*/
 
+    String userName;
     @NotBlank
     @Size(max = 255)
     private String topic;
@@ -36,7 +37,7 @@ public class Question {
     @NotNull
     @NotEmpty(message = "The question must contain at least one tag")
     private Set<Tag> tags;
-    private int comments;
-    private int answers;
+    private Integer comments;
+    private Integer answers;
 
 }

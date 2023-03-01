@@ -18,7 +18,7 @@ public class QuestionController {
 
     @GetMapping("/questions")
     public String questions(Model model,
-                            @RequestParam(name = "page", defaultValue = "0") int page,) {
+                            @RequestParam(name = "page", defaultValue = "0") int page) {
         Page<Question> questions = questionRepository.findAll(PageRequest.of(page, 10));
         model.addAttribute("listQuestions", questions.getContent());
         model.addAttribute("pages", new int[questions.getTotalPages()]);
@@ -27,4 +27,14 @@ public class QuestionController {
 
     }
 
+    @PostMapping("/search")
+    public String searchQuestion(Model model,
+                                 @RequestParam(name = "page", defaultValue = "0") int page,
+                                 @RequestParam(name = "keyword", defaultValue = "") String keyword){
+        Page<Question> questions = questionRepository.findByTopicContains(keyword,PageRequest.of(page, 10));
+        model.addAttribute("listQuestions", questions.getContent());
+        model.addAttribute("pages", new int[questions.getTotalPages()]);
+        model.addAttribute("currentPage", page);
+        return "questions";
+    }
 }
