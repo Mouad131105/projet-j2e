@@ -1,6 +1,9 @@
-package fr.uge.jee.ugeoverflow.user;
+package fr.uge.jee.ugeoverflow.controller;
 
-import fr.uge.jee.ugeoverflow.publishing.question.Question;
+import fr.uge.jee.ugeoverflow.entities.Question;
+import fr.uge.jee.ugeoverflow.entities.Role;
+import fr.uge.jee.ugeoverflow.entities.User;
+import fr.uge.jee.ugeoverflow.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,8 +13,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/registration")

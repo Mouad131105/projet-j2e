@@ -1,6 +1,8 @@
-package fr.uge.jee.ugeoverflow.user;
+package fr.uge.jee.ugeoverflow.service;
 
-import fr.uge.jee.ugeoverflow.publishing.question.Question;
+import fr.uge.jee.ugeoverflow.entities.Question;
+import fr.uge.jee.ugeoverflow.repository.UserRepository;
+import fr.uge.jee.ugeoverflow.entities.User;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;

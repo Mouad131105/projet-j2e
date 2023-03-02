@@ -1,19 +1,19 @@
-package fr.uge.jee.ugeoverflow.publishing.question;
+package fr.uge.jee.ugeoverflow.controller;
 
-import fr.uge.jee.ugeoverflow.publishing.Tag;
-import fr.uge.jee.ugeoverflow.user.Role;
-import fr.uge.jee.ugeoverflow.user.User;
-import fr.uge.jee.ugeoverflow.user.UserService;
+import fr.uge.jee.ugeoverflow.entities.Question;
+import fr.uge.jee.ugeoverflow.entities.Tag;
+import fr.uge.jee.ugeoverflow.service.QuestionService;
+import fr.uge.jee.ugeoverflow.entities.User;
+import fr.uge.jee.ugeoverflow.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 @Controller
 @RequestMapping("/question")
@@ -48,5 +48,26 @@ public class QuestionController {
         Question createdQuestion = this.questionService.save(question);
         model.addAttribute("createdQuestion", createdQuestion);
         return "question-profile";
+    }
+
+    @GetMapping("/questions")
+    public String questions(Model model,
+                            @RequestParam(name = "page", defaultValue = "0") int page) {
+        Page<Question> questions = questionService.findAll(page, 10);
+        model.addAttribute("listQuestions", questions.getContent());
+        model.addAttribute("pages", new int[questions.getTotalPages()]);
+        model.addAttribute("currentPage", page);
+        return "questions";
+    }
+
+    @PostMapping("/search")
+    public String searchQuestion(Model model,
+                                 @RequestParam(name = "page", defaultValue = "0") int page,
+                                 @RequestParam(name = "keyword", defaultValue = "") String keyword){
+        Page<Question> questions = questionService.findByTopicContains(keyword,PageRequest.of(page, 10));
+        model.addAttribute("listQuestions", questions.getContent());
+        model.addAttribute("pages", new int[questions.getTotalPages()]);
+        model.addAttribute("currentPage", page);
+        return "questions";
     }
 }
