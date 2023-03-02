@@ -1,4 +1,4 @@
-package fr.uge.jee.ugeoverflow.user;
+package fr.uge.jee.ugeoverflow.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,7 +34,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinTable(
             name = "Followed_Users",
             joinColumns = @JoinColumn(name = "User_Username"),

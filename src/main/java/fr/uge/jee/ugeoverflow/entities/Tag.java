@@ -1,4 +1,4 @@
-package fr.uge.jee.ugeoverflow.publishing;
+package fr.uge.jee.ugeoverflow.entities;
 
 //@Embeddable
 public enum Tag {
