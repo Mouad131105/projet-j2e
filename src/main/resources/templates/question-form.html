@@ -4,36 +4,24 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <form th:action="@{/question/create}" th:object="${question}" method="post">
-    <h2>Question register</h2>
+    <h1>Create Question</h1>
 
     <div>
-        <input type ="hidden" th:field="${question.author}" th:value="${loggedUser}" />
+        <label for="topic">Topic:</label>
+        <input type="text" id="topic" name="topic" th:field="*{topic}" required>
     </div>
-
     <div>
-        <label for="topic">topic:</label>
-        <input id="topic" th:field="${question.topic}" type="text" name="topic">
-        <th:block th:if="${#fields.hasErrors('topic')}" th:errors="${question.topic}"></th:block>
+        <label for="content">Content:</label>
+        <textarea id="content" name="content" th:field="*{content}" maxlength="255"></textarea>
     </div>
-
     <div>
-        <label for="content">content:</label>
-        <input id="content" th:field="${question.content}" type="text" name="content">
-        <th:block th:if="${#fields.hasErrors('content')}" th:errors="${question.content}"></th:block>
-    </div>
-
-
-    <div>
-        <label for="tags">tags:</label>
-        <select id="tags" th:field="${question.tags}" name="tags">
-            <option selected disabled hidden style='display: none' value=''></option>
-            <option th:each="tag : ${allTags}" th:value="${tag.toString()}" th:text="${tag.toString()}">
-            </option>
+        <label for="tags">Tags:</label>
+        <select id="tags" name="tags" multiple th:field="*{tags}">
+            <option th:each="tag : ${allTags}" th:value="${tag}" th:text="${tag}"></option>
         </select>
     </div>
-
     <div>
-        <button type="submit">New Question</button>
+        <button type="submit">Create</button>
     </div>
 </form>
 

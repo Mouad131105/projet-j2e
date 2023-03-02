@@ -20,7 +20,7 @@ public class Question {
     @Id
     private long id;
 
-    @NotBlank
+    @NotNull
     @ManyToOne
     private User author;
 
