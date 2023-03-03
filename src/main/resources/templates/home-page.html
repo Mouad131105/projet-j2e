@@ -30,6 +30,8 @@
                             <option th:each="user : ${allUsers}" th:value="${user.getUsername()}" th:text="${user.getUsername()}">
                             </option>
                         </datalist>
+
+                        <input type="hidden" name="loggedUser" th:value="${loggedUser.username}">
                         <button type="submit">submit</button>
                     </div>
                 </form>

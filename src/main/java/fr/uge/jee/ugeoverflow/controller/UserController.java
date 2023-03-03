@@ -25,11 +25,18 @@ public class UserController {
 
     @PostMapping("/profile")
     public String processProfile(@RequestParam("username") String username,
+                                 @RequestParam("loggedUser") String loggedUser,
                                  Model model) {
 
         User user = this.userService.findUserByUsername(username);
+        User currentUser = this.userService.findUserByUsername(loggedUser);
         if (user != null) {
             model.addAttribute("user", user);
+            if(currentUser.getFollowedUsers().contains(user)){
+                model.addAttribute("isFollow", true);
+            }else{
+                model.addAttribute("isFollow", false);
+            }
 
             List<Question> questions = this.userService.getAllQuestionFromUser(user.getUsername());
             model.addAttribute("questions", questions);
@@ -40,6 +47,7 @@ public class UserController {
         model.addAttribute("selectedUserError", "User " + username + " cannot be found");
         return "home-page";
     }
+
 
     @GetMapping("/register")
     public String userForm(User user) {
