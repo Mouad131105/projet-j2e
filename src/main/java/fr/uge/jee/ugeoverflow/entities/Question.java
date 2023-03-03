@@ -32,7 +32,7 @@ public class Question {
     private String content;
 
     @Enumerated(EnumType.STRING)
-    @ElementCollection(targetClass = Tag.class)
+    @ElementCollection(targetClass = Tag.class, fetch = FetchType.EAGER)
     @NotNull(message = "Tags cannot be null.")
     @NotEmpty(message = "The question must contain at least one tag.")
     private Set<Tag> tags;
