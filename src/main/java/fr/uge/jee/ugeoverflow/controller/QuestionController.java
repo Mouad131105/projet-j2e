@@ -29,10 +29,16 @@ public class QuestionController {
     @GetMapping("/create")
     public String questionForm(@RequestParam String username, Question question, Model model) {
         model.addAttribute("allTags", Arrays.asList(Tag.values()));
+
         User loggedUser = this.userService.findUserByUsername(username);
         if (loggedUser != null ) {
             question.setAuthor(loggedUser);
+            if(question.getAuthor() != null) {
+                return "question-form";
+            }
+            model.addAttribute("selectedUserError", "User " + username + " cannot be found");
         }
+        model.addAttribute("selectedUserError", "User " + username + " cannot be found");
         return "question-form"; //normalement reviens sur la homepage car erreur sur l'utilisateur actuel
     }
 
@@ -42,6 +48,7 @@ public class QuestionController {
                               Model model) {
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("allTags", Arrays.asList(Tag.values()));
             return "question-form";
         }
 
@@ -49,6 +56,7 @@ public class QuestionController {
         model.addAttribute("createdQuestion", createdQuestion);
         return "question-profile";
     }
+
 
     @GetMapping("/questions")
     public String questions(Model model,

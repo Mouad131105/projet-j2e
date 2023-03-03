@@ -6,6 +6,18 @@
 <form th:action="@{/question/create}" th:object="${question}" method="post">
     <h1>Create Question</h1>
 
+    <div th:class="error" th:if="${selectedUserError != null}" th:text="${selectedUserError}"/>
+
+    <div th:if="${#fields.hasAnyErrors()}">
+        <ul>
+            <li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+        </ul>
+    </div>
+
+    <div>
+        <p th:text="${question.author}"></p>
+    </div>
+
     <div>
         <label for="topic">Topic:</label>
         <input type="text" id="topic" name="topic" th:field="*{topic}" required>
