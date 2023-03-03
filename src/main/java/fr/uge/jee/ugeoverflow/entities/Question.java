@@ -20,11 +20,11 @@ public class Question {
     @Id
     private long id;
 
-    @NotNull
+    @NotNull(message = "Author cannot be null.")
     @ManyToOne
     private User author;
 
-    @NotBlank
+    @NotBlank(message = "Topic cannot be empty.")
     @Size(max = 255)
     private String topic;
 
@@ -33,10 +33,9 @@ public class Question {
 
     @Enumerated(EnumType.STRING)
     @ElementCollection(targetClass = Tag.class)
-    @NotNull
-    @NotEmpty(message = "The question must contain at least one tag")
+    @NotNull(message = "Tags cannot be null.")
+    @NotEmpty(message = "The question must contain at least one tag.")
     private Set<Tag> tags;
     private int comments;
     private int answers;
-
 }
