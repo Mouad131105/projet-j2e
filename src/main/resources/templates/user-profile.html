@@ -40,8 +40,14 @@
     </div>
 
 
-    <!-- rajouter le truc quand il appuye sur le bouton -->
-    <button th:text="${isFollow == true} ? 'UNFOLLOW' : 'FOLLOW'"></button>
+    <div>
+        <form th:action="@{/registration/follow}" method="post" target="dummyframe">
+            <input type="hidden"  name="userFollow" th:value="${user.username}">
+            <input type="hidden"  name="loggedUser" th:value="${loggedUser.username}">
+            <input type="submit" th:value="${isFollow == true} ? 'UNFOLLOW' : 'FOLLOW'" onClick="window.location.reload()">
+        </form>
+    </div>
 
+    <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
 
 </html>
