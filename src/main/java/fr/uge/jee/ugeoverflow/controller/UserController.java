@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/registration")
@@ -48,13 +49,70 @@ public class UserController {
     public String processProfile(@RequestParam("username") String username,
                                  Model model) {
 
-        User user = this.userService.findUserByUsername(username);
+        User user = this.userService.findUserByUsername(userFollow);
+        User currentUser = this.userService.findUserByUsername(loggedUser);
         if (user != null) {
             model.addAttribute("user", user);
-
+            model.addAttribute("loggedUser", currentUser);
+            Set<User> followedUsers = currentUser.getFollowedUsers();
+            if(followedUsers.contains(user)){
+                followedUsers.remove(user);
+                currentUser.setFollowedUsers(followedUsers);
+                this.userService.save(currentUser);
+                model.addAttribute("isFollow", false);
+            }else{
+                followedUsers.add(user);
+                currentUser.setFollowedUsers(followedUsers);
+                this.userService.save(currentUser);
+                model.addAttribute("isFollow", true);
+            }
             List<Question> questions = this.userService.getAllQuestionFromUser(user.getUsername());
             model.addAttribute("questions", questions);
+        }
+        return "user-profile";
+    }
 
+    @RequestMapping(value = "/profile/{selectedUsername}", method = {RequestMethod.GET,RequestMethod.POST})
+    public String processProfile(@PathVariable("selectedUsername") String selectedUsername,
+                                 @RequestParam("loggedUser") String loggedUser,
+                                 Model model) {
+
+        User user = this.userService.findUserByUsername(selectedUsername);
+        User currentUser = this.userService.findUserByUsername(loggedUser);
+        if (user != null && currentUser != null) {
+            model.addAttribute("user", user);
+            model.addAttribute("loggedUser", currentUser);
+            if(currentUser.getFollowedUsers().contains(user)){
+                model.addAttribute("isFollow", true);
+            }else{
+                model.addAttribute("isFollow", false);
+            }
+            List<Question> questions = this.userService.getAllQuestionFromUser(user.getUsername());
+            model.addAttribute("questions", questions);
+            return "user-profile";
+        }
+
+        model.addAttribute("selectedUserError", "User " + selectedUsername + " cannot be found");
+        return "home-page";
+    }
+
+    /*@PostMapping("/profile")
+    public String processProfile(@RequestParam("username") String username,
+                                 @RequestParam("loggedUser") String loggedUser,
+                                 Model model) {
+
+        User user = this.userService.findUserByUsername(username);
+        User currentUser = this.userService.findUserByUsername(loggedUser);
+        if (user != null && currentUser != null) {
+            model.addAttribute("user", user);
+            model.addAttribute("loggedUser", currentUser);
+            if(currentUser.getFollowedUsers().contains(user)){
+                model.addAttribute("isFollow", true);
+            }else{
+                model.addAttribute("isFollow", false);
+            }
+            List<Question> questions = this.userService.getAllQuestionFromUser(user.getUsername());
+            model.addAttribute("questions", questions);
             return "user-profile";
         }
 

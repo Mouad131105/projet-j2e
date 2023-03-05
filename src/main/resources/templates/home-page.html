@@ -21,6 +21,7 @@
 
 
         <div id="blocs">
+
             <div id="bloc1">
                 <div class="container">
 
@@ -89,13 +90,28 @@
             <!--<div class="d-none" id="bloc2">
                 <form th:action="@{/registration/profile}" method="post">
                     <div>
-                        <input type="text" autocomplete="off" th:name="username" list= "users">
+                        <input type="text" autocomplete="off" id="selectedUsername" th:name="username" list= "users">
                         <datalist id="users">
                             <option selected disabled hidden style='display: none' value=''></option>
                             <option th:each="user : ${allUsers}" th:value="${user.getUsername()}" th:text="${user.getUsername()}">
                             </option>
                         </datalist>
-                        <button type="submit">submit</button>
+
+                        <input type="hidden" id="loggedUsername" name="loggedUser" th:value="${loggedUser.username}">
+                        <button id="showProfileButton" type="submit">submit</button>
+                    </div>
+                </form> -->
+
+                <form th:action="@{/profile/{selectedUsername}(selectedUsername=${selectedUsername})}" method="get">
+                    <div>
+                        <input type="text" autocomplete="off" name="selectedUsername" list="users">
+                        <datalist id="users">
+                            <option selected disabled hidden style='display: none' value=''></option>
+                            <option th:each="user : ${allUsers}" th:value="${user.getUsername()}" th:text="${user.getUsername()}"></option>
+                        </datalist>
+
+                        <input type="hidden" id="loggedUsername" name="loggedUser" th:value="${loggedUser.username}">
+                        <button id="showProfileButton" type="submit">submit</button>
                     </div>
                 </form>
             </div>-->
@@ -133,6 +149,23 @@
             bloc2.classList.add("d-none");
             bloc3.classList.remove("d-none");
         });
+
+        $('showProfileButton').addEventListener("click", () => {
+            $.ajax({
+                type:"post",
+                url: "registration/profile/" + $('#selectedUsername')
+            });
+
+            /*const r = new XMLHttpRequest();
+            r.open("POST", 'registration/profile/' + $('#selectedUsername'), true);
+            r.onreadystatechange = function () {
+                if (r.readyState !== 4 || r.status !== 200){
+                    return;
+                }
+                console.log(r.responseText); };
+            r.send();*/
+        });
+
     </script>
 
     <!--  Exemple de select

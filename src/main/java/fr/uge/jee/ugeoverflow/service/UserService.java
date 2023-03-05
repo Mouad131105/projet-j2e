@@ -42,6 +42,8 @@ public class UserService {
         return this.userRepository.getAllQuestionFromUser(username);
     }
 
+
+
     @PostConstruct
     private void postConstruct() {
         User user1 = new User(); user1.setUsername("Michel"); user1.setEmail("michel@gmail.com"); user1.setPassword("Michel123!");

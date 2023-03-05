@@ -44,5 +44,4 @@ public class User {
 
     //@Version
     private long confidenceScore;
-
 }
