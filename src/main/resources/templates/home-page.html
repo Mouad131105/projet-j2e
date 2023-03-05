@@ -44,7 +44,7 @@
                                 <li th:each="question : ${listQuestions}" class="list-group-item">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h5>
-                                            <a th:href="@{/question/{id}(id=${question.id})}" th:text="${question.topic}"></a>
+                                            <a th:href="@{/question/profile/{id}(id=${question.id})}" class="stretched-link" th:text="${question.topic}"></a>
                                         </h5>
                                         <small th:text="${question.author.getUsername()}"></small>
                                     </div>
@@ -85,22 +85,6 @@
                     </div>
                 </div>
             </div>
-
-
-            <!--<div class="d-none" id="bloc2">
-                <form th:action="@{/registration/profile}" method="post">
-                    <div>
-                        <input type="text" autocomplete="off" id="selectedUsername" th:name="username" list= "users">
-                        <datalist id="users">
-                            <option selected disabled hidden style='display: none' value=''></option>
-                            <option th:each="user : ${allUsers}" th:value="${user.getUsername()}" th:text="${user.getUsername()}">
-                            </option>
-                        </datalist>
-
-                        <input type="hidden" id="loggedUsername" name="loggedUser" th:value="${loggedUser.username}">
-                        <button id="showProfileButton" type="submit">submit</button>
-                    </div>
-                </form> -->
 
 
             <div class="d-none" id="bloc3">
