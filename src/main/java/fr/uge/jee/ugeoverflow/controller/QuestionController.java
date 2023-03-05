@@ -28,6 +28,15 @@ public class QuestionController {
         this.userService = userService;
     }
 
+    @GetMapping("/profile/{id}")
+    public String getProfile(@PathVariable("id") String id,
+                             Model model) {
+
+        Question question = this.questionService.findQuestionById(Long.valueOf(id));
+        model.addAttribute("question", question);
+        return "question-profile";
+    }
+
     @GetMapping("/create")
     public String questionForm(@RequestParam String username, Question question, Model model) {
         model.addAttribute("allTags", Arrays.asList(Tag.values()));
