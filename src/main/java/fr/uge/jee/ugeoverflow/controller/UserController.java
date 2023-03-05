@@ -28,26 +28,10 @@ public class UserController {
         this.questionService = questionService;
     }
 
-    @GetMapping("/profile/{username}")
-    public String getProfile(@PathVariable("username") String username,
-                                 @RequestParam(name = "loggedUsername") String loggedUsername,
-                                 Model model) {
-        model.addAttribute("username",username);
-        User user = this.userService.findUserByUsername(username);
-        if (user != null) {
-            model.addAttribute("user", user);
-            List<Question> questions = this.userService.getAllQuestionFromUser(user.getUsername());
-            model.addAttribute("questions", questions);
-            return "user-profile";
-        }
-
-        model.addAttribute("selectedUserError", "User " + username + " cannot be found");
-        return "home-page";
-    }
-
-    /*@PostMapping("/profile")
-    public String processProfile(@RequestParam("username") String username,
-                                 Model model) {
+    @PostMapping("/follow")
+    public String processFollow(@RequestParam("userFollow") String userFollow,
+                                @RequestParam("loggedUser") String loggedUser,
+                                Model model) {
 
         User user = this.userService.findUserByUsername(userFollow);
         User currentUser = this.userService.findUserByUsername(loggedUser);
@@ -72,33 +56,9 @@ public class UserController {
         return "user-profile";
     }
 
-    @RequestMapping(value = "/profile/{selectedUsername}", method = {RequestMethod.GET,RequestMethod.POST})
-    public String processProfile(@PathVariable("selectedUsername") String selectedUsername,
-                                 @RequestParam("loggedUser") String loggedUser,
-                                 Model model) {
-
-        User user = this.userService.findUserByUsername(selectedUsername);
-        User currentUser = this.userService.findUserByUsername(loggedUser);
-        if (user != null && currentUser != null) {
-            model.addAttribute("user", user);
-            model.addAttribute("loggedUser", currentUser);
-            if(currentUser.getFollowedUsers().contains(user)){
-                model.addAttribute("isFollow", true);
-            }else{
-                model.addAttribute("isFollow", false);
-            }
-            List<Question> questions = this.userService.getAllQuestionFromUser(user.getUsername());
-            model.addAttribute("questions", questions);
-            return "user-profile";
-        }
-
-        model.addAttribute("selectedUserError", "User " + selectedUsername + " cannot be found");
-        return "home-page";
-    }
-
-    /*@PostMapping("/profile")
-    public String processProfile(@RequestParam("username") String username,
-                                 @RequestParam("loggedUser") String loggedUser,
+    @GetMapping("/profile/{username}")
+    public String getProfile(@PathVariable("username") String username,
+                                 @RequestParam(name = "loggedUser") String loggedUser,
                                  Model model) {
 
         User user = this.userService.findUserByUsername(username);
@@ -118,7 +78,7 @@ public class UserController {
 
         model.addAttribute("selectedUserError", "User " + username + " cannot be found");
         return "home-page";
-    }*/
+    }
 
     @GetMapping("/register")
     public String userForm(User user) {

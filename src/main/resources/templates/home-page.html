@@ -78,7 +78,7 @@
                                     <h5 class="card-title" th:text="${user.username}"></h5>
                                     <p class="card-text"><strong>Role:</strong> <span th:text="${user.role}"></span></p>
                                     <p class="card-text"><strong>Confidence score:</strong> <span th:text="${user.confidenceScore}"></span></p>
-                                    <a th:href="@{/registration/profile/{username}(username=${user.username},loggedUsername=${loggedUser.username})}" class="stretched-link">See</a>
+                                    <a th:href="@{/registration/profile/{username}(username=${user.username},loggedUser=${loggedUser.username})}" class="stretched-link">See</a>
                                 </div>
                             </div>
                         </div>
@@ -101,20 +101,6 @@
                         <button id="showProfileButton" type="submit">submit</button>
                     </div>
                 </form> -->
-
-                <form th:action="@{/profile/{selectedUsername}(selectedUsername=${selectedUsername})}" method="get">
-                    <div>
-                        <input type="text" autocomplete="off" name="selectedUsername" list="users">
-                        <datalist id="users">
-                            <option selected disabled hidden style='display: none' value=''></option>
-                            <option th:each="user : ${allUsers}" th:value="${user.getUsername()}" th:text="${user.getUsername()}"></option>
-                        </datalist>
-
-                        <input type="hidden" id="loggedUsername" name="loggedUser" th:value="${loggedUser.username}">
-                        <button id="showProfileButton" type="submit">submit</button>
-                    </div>
-                </form>
-            </div>-->
 
 
             <div class="d-none" id="bloc3">
@@ -150,21 +136,6 @@
             bloc3.classList.remove("d-none");
         });
 
-        $('showProfileButton').addEventListener("click", () => {
-            $.ajax({
-                type:"post",
-                url: "registration/profile/" + $('#selectedUsername')
-            });
-
-            /*const r = new XMLHttpRequest();
-            r.open("POST", 'registration/profile/' + $('#selectedUsername'), true);
-            r.onreadystatechange = function () {
-                if (r.readyState !== 4 || r.status !== 200){
-                    return;
-                }
-                console.log(r.responseText); };
-            r.send();*/
-        });
 
     </script>
 
