@@ -41,13 +41,26 @@
 
 
     <div>
-        <form th:action="@{/registration/follow}" method="post" target="dummyframe">
+        <form th:action="@{/registration/follow}" method="post" id="followForm" onsubmit="return false;">
             <input type="hidden"  name="userFollow" th:value="${user.username}">
             <input type="hidden"  name="loggedUser" th:value="${loggedUser.username}">
-            <input type="submit" th:value="${isFollow == true} ? 'UNFOLLOW' : 'FOLLOW'" onClick="window.location.reload()">
+            <!--<input type="submit" th:value="${isFollow == true} ? 'UNFOLLOW' : 'FOLLOW'">-->
+            <button onclick="submitForm()" th:text="${isFollow == true} ? 'UNFOLLOW' : 'FOLLOW'"></button>
         </form>
     </div>
 
+
+    <script>
+        const followForm = document.querySelector("#followForm");
+
+        function submitForm() {
+            followForm.submit();
+        }
+    </script>
+
+    <!--
+    target="dummyframe"
     <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+    -->
 
 </html>

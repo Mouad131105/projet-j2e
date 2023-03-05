@@ -47,14 +47,37 @@ public class UserController {
                 this.userService.save(currentUser);
                 model.addAttribute("isFollow", true);
             }
-
             List<Question> questions = this.userService.getAllQuestionFromUser(user.getUsername());
             model.addAttribute("questions", questions);
         }
         return "user-profile";
     }
 
-    @PostMapping("/profile")
+    @RequestMapping(value = "/profile/{selectedUsername}", method = {RequestMethod.GET,RequestMethod.POST})
+    public String processProfile(@PathVariable("selectedUsername") String selectedUsername,
+                                 @RequestParam("loggedUser") String loggedUser,
+                                 Model model) {
+
+        User user = this.userService.findUserByUsername(selectedUsername);
+        User currentUser = this.userService.findUserByUsername(loggedUser);
+        if (user != null && currentUser != null) {
+            model.addAttribute("user", user);
+            model.addAttribute("loggedUser", currentUser);
+            if(currentUser.getFollowedUsers().contains(user)){
+                model.addAttribute("isFollow", true);
+            }else{
+                model.addAttribute("isFollow", false);
+            }
+            List<Question> questions = this.userService.getAllQuestionFromUser(user.getUsername());
+            model.addAttribute("questions", questions);
+            return "user-profile";
+        }
+
+        model.addAttribute("selectedUserError", "User " + selectedUsername + " cannot be found");
+        return "home-page";
+    }
+
+    /*@PostMapping("/profile")
     public String processProfile(@RequestParam("username") String username,
                                  @RequestParam("loggedUser") String loggedUser,
                                  Model model) {
@@ -76,7 +99,7 @@ public class UserController {
 
         model.addAttribute("selectedUserError", "User " + username + " cannot be found");
         return "home-page";
-    }
+    }*/
 
 
     @GetMapping("/register")
