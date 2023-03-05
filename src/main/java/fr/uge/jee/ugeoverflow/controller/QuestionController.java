@@ -43,21 +43,6 @@ public class QuestionController {
     }
 
     @PostMapping("/create")
-    public String processForm(@RequestParam String username,@RequestParam String topic,
-                              @RequestParam String content,@RequestParam Set<Tag> tags,
-                              Model model) {
-
-        Question question = new Question();
-        question.setAuthor(this.userService.findUserByUsername(username));
-        question.setTopic(topic); question.setContent(content);
-        question.setTags(tags);
-
-        Question createdQuestion = this.questionService.save(question);
-        model.addAttribute("createdQuestion", createdQuestion);
-        return "question-profile";
-    }
-
-    /*@PostMapping("/create")
     public String processForm(@ModelAttribute(name="question") @Valid Question question,
                               BindingResult bindingResult,
                               Model model) {
@@ -70,7 +55,7 @@ public class QuestionController {
         Question createdQuestion = this.questionService.save(question);
         model.addAttribute("createdQuestion", createdQuestion);
         return "question-profile";
-    }*/
+    }
 
 
     @GetMapping("/questions")
