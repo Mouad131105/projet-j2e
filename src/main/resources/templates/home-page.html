@@ -33,8 +33,9 @@
                         </form>
                     </div>
 
-                    <form method="post" th:action="@{/search}">
+                    <form method="post" th:action="@{/question/search}">
                         <input type="text" name="keyword">
+                        <input type="hidden" name="loggedUser" th:value="${loggedUser.username}">
                         <button type="submit" class="btn btn-primary">Chercher</button>
                     </form>
 
@@ -62,7 +63,7 @@
                         <li th:each="page,status:${pages}">
                             <a th:class="${status.index==currentPage?'btn btn-primary ms-1':'btn btn-outline-primary ms-1'}"
                                th:text="${status.index}"
-                               th:href="@{questions(page=${status.index})}"
+                               th:href="@{/question/questions(page=${status.index},loggedUser=${loggedUser.username})}"
                             ></a>
                         </li>
                     </ul>
