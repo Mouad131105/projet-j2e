@@ -28,6 +28,15 @@ public class QuestionController {
         this.userService = userService;
     }
 
+    @GetMapping("/profile/{id}")
+    public String getProfile(@PathVariable("id") String id,
+                             Model model) {
+
+        Question question = this.questionService.findQuestionById(Long.valueOf(id));
+        model.addAttribute("question", question);
+        return "question-profile";
+    }
+
     @GetMapping("/create")
     public String questionForm(@RequestParam String username, Question question, Model model) {
         model.addAttribute("allTags", Arrays.asList(Tag.values()));
@@ -58,24 +67,39 @@ public class QuestionController {
     }
 
 
+
     @GetMapping("/questions")
     public String questions(Model model,
-                            @RequestParam(name = "page", defaultValue = "0") int page) {
-        Page<Question> questions = questionService.findAll(page, 10);
+                            @RequestParam(name = "page", defaultValue = "0") int page,
+                            @RequestParam(name = "loggedUser") String loggedUser) {
+        List<User> users = this.userService.getAllUsers();
+        if(!users.isEmpty()){
+            model.addAttribute("allUsers",users);
+        }
+        User user = this.userService.findUserByUsername(loggedUser);
+        model.addAttribute("loggedUser", user);
+        Page<Question> questions = questionService.findAll(page, 5);
         model.addAttribute("listQuestions", questions.getContent());
         model.addAttribute("pages", new int[questions.getTotalPages()]);
         model.addAttribute("currentPage", page);
-        return "questions";
+        return "home-page";
     }
 
     @PostMapping("/search")
     public String searchQuestion(Model model,
                                  @RequestParam(name = "page", defaultValue = "0") int page,
-                                 @RequestParam(name = "keyword", defaultValue = "") String keyword){
-        Page<Question> questions = questionService.findByTopicContains(keyword,PageRequest.of(page, 10));
+                                 @RequestParam(name = "keyword", defaultValue = "") String keyword,
+                                 @RequestParam(name = "loggedUser") String loggedUser){
+        List<User> users = this.userService.getAllUsers();
+        if(!users.isEmpty()){
+            model.addAttribute("allUsers",users);
+        }
+        User user = this.userService.findUserByUsername(loggedUser);
+        model.addAttribute("loggedUser", user);
+        Page<Question> questions = questionService.findByTopicContains(keyword,PageRequest.of(page, 5));
         model.addAttribute("listQuestions", questions.getContent());
         model.addAttribute("pages", new int[questions.getTotalPages()]);
         model.addAttribute("currentPage", page);
-        return "questions";
+        return "home-page";
     }
 }

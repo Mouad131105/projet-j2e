@@ -26,4 +26,8 @@ public class QuestionService {
     public Page<Question> findByTopicContains(String keyword, PageRequest of){
         return questionRepository.findByTopicContains(keyword,of);
     }
+
+    public Question findQuestionById(Long id) {
+        return this.questionRepository.findQuestionById(id);
+    }
 }

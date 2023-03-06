@@ -1,10 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+
+<h1 th:text="${question.topic}"></h1>
+
+
+<div>
+    <tr th:each="tag: ${question.tags}">
+        <td th:text="${tag}"></td>
+    </tr>
+    <p th:text="${question.content}"> </p>
+
+    <table>
+        <tbody>
+        <tr th:if="${question.comments == 0}">
+            <td colspan="2"> This question as no comments </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+
 </html>

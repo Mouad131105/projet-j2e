@@ -121,7 +121,7 @@ public class UserController {
         User user = this.userService.findUserByUsername(username);
         if (user != null && user.getPassword().equals(password)) {
             model.addAttribute("loggedUser", user);
-            Page<Question> questions = questionService.findAll(0, 10);
+            Page<Question> questions = questionService.findAll(0, 5);
             model.addAttribute("listQuestions", questions.getContent());
             model.addAttribute("pages", new int[questions.getTotalPages()]);
             model.addAttribute("currentPage", 0);

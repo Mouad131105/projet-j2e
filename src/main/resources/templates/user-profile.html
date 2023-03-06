@@ -34,6 +34,9 @@
                 <td>
                     <span th:text="${question.content}"> Content </span>
                 </td>
+                <td>
+                    <a th:href="@{/question/profile/{id}(id=${question.id})}" class="stretched-link">See</a>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -45,7 +48,7 @@
             <input type="hidden"  name="userFollow" th:value="${user.username}">
             <input type="hidden"  name="loggedUser" th:value="${loggedUser.username}">
             <!--<input type="submit" th:value="${isFollow == true} ? 'UNFOLLOW' : 'FOLLOW'">-->
-            <button onclick="submitForm()" th:text="${isFollow == true} ? 'UNFOLLOW' : 'FOLLOW'"></button>
+            <button onclick="submitForm()" th:text="${isFollow == true} ? 'UNFOLLOW' : 'FOLLOW'" th:disabled="${user.username == loggedUser.username}"></button>
         </form>
     </div>
 

@@ -36,6 +36,7 @@ public class Question {
     @NotNull(message = "Tags cannot be null.")
     @NotEmpty(message = "The question must contain at least one tag.")
     private Set<Tag> tags;
+
     private int comments;
     private int answers;
 }
