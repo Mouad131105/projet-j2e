@@ -15,24 +15,13 @@
     </tr>
     <p th:text="${question.content}"> </p>
 
-    <!--<table>
+    <table>
         <tbody>
-        <tr th:if="${createdQuestion.getComments()}">
+        <tr th:if="${question.comments == 0}">
             <td colspan="2"> This question as no comments </td>
         </tr>
-        <tr th:each="comments : ${questions}">
-            <td title="Tags" th:each="tag : ${question.tags}">
-                <span th:text="${tag}"></span>
-            </td>
-            <td>
-                <span th:text="${question.topic}"> Topic </span>
-            </td>
-            <td>
-                <span th:text="${question.content}"> Content </span>
-            </td>
-        </tr>
         </tbody>
-    </table>-->
+    </table>
 
 </div>
 
