@@ -35,7 +35,7 @@
                     <span th:text="${question.content}"> Content </span>
                 </td>
                 <td>
-                    <a th:href="@{/question/profile/{id}(id=${question.id})}" class="stretched-link">See</a>
+                    <a th:href="@{/question/profile/{id}(id=${question.id},loggedUser=${loggedUser.username})}" class="stretched-link">See</a>
                 </td>
             </tr>
             </tbody>

@@ -45,7 +45,7 @@
                                 <li th:each="question : ${listQuestions}" class="list-group-item">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <h5>
-                                            <a th:href="@{/question/profile/{id}(id=${question.id})}" class="stretched-link" th:text="${question.topic}"></a>
+                                            <a th:href="@{/question/profile/{id}(id=${question.id},loggedUser=${loggedUser.username})}" class="stretched-link" th:text="${question.topic}"></a>
                                         </h5>
                                         <small th:text="${question.author.getUsername()}"></small>
                                     </div>

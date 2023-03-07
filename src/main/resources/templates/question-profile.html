@@ -15,15 +15,43 @@
     </tr>
     <p th:text="${question.content}"> </p>
 
-    <table>
-        <tbody>
-        <tr th:if="${question.comments == 0}">
-            <td colspan="2"> This question as no comments </td>
-        </tr>
-        </tbody>
-    </table>
+    <div th:if="${commentsQuestion.isEmpty()}">
+        <p>This question has no comments</p>
+    </div>
+    <div th:if="${!commentsQuestion.isEmpty()}">
+        <ul>
+            <li th:each="comment, iter : ${commentsQuestion}" th:if="${iter.index < 5}">
+                <p th:text="${comment.content}"></p>
+            </li>
+        </ul>
+        <div th:if="${commentsQuestion.size() > 5}">
+            <button type="button" class="btn btn-secondary" id="see-more" onclick="showMoreComments()">See more</button>
+        </div>
+        <ul id="hidden-comments" class="list-group" style="display: none">
+            <li th:each="comment, iter : ${commentsQuestion}" th:if="${iter.index >= 5}">
+                <p th:text="${comment.content}" class="list-group-item"></p>
+            </li>
+        </ul>
+    </div>
+
+    <form th:action="@{/question/comment/question}" th:object="${commentQuestion}" method="post">
+        <input type="hidden" th:name="author.username" th:value="${loggedUser}">
+        <input type="hidden" th:name="parentQuestion.id" th:value="${question.id}">
+        <div class="form-group">
+            <textarea class="form-control" id="content" name="content" rows="3" th:field="*{content}"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Add comment</button>
+    </form>
 
 </div>
 
+<script>
+    function showMoreComments() {
+        const hiddenComments = document.getElementById("hidden-comments");
+        hiddenComments.style.display = "block";
+        const seeMoreButton = document.getElementById("see-more");
+        seeMoreButton.style.display = "none";
+    }
+</script>
 
 </html>
