@@ -1,9 +1,8 @@
 package fr.uge.jee.ugeoverflow.controller;
 
-import fr.uge.jee.ugeoverflow.entities.Question;
-import fr.uge.jee.ugeoverflow.entities.Tag;
+import fr.uge.jee.ugeoverflow.entities.*;
+import fr.uge.jee.ugeoverflow.service.CommentQuestionService;
 import fr.uge.jee.ugeoverflow.service.QuestionService;
-import fr.uge.jee.ugeoverflow.entities.User;
 import fr.uge.jee.ugeoverflow.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,25 +14,50 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/question")
 public class QuestionController {
     private final QuestionService questionService;
     private final UserService userService;
+    private final CommentQuestionService commentQuestionService;
 
-    public QuestionController(QuestionService questionService, UserService userService) {
+    public QuestionController(QuestionService questionService, UserService userService,
+                              CommentQuestionService commentQuestionService) {
         this.questionService = questionService;
         this.userService = userService;
+        this.commentQuestionService = commentQuestionService;
+    }
+
+
+    @PostMapping("/comment/question")
+    public String processForm(@ModelAttribute(name="commentQuestion") @Valid CommentQuestion commentQuestion,
+                              BindingResult bindingResult,
+                              Model model) {
+
+        CommentQuestion newCommentQuestion = this.commentQuestionService.save(commentQuestion);
+        Question question = newCommentQuestion.getParentQuestion();
+        List<CommentQuestion> commentQuestions = this.commentQuestionService.findAllByParentQuestionId(question.getId());
+        model.addAttribute("question", question);
+        model.addAttribute("commentsQuestion", commentQuestions);
+        model.addAttribute("loggedUser", newCommentQuestion.getAuthor());
+
+        return "question-profile";
     }
 
     @GetMapping("/profile/{id}")
     public String getProfile(@PathVariable("id") String id,
+                             @RequestParam(name = "loggedUser") String loggedUser,
+                             CommentQuestion commentQuestion,
                              Model model) {
 
         Question question = this.questionService.findQuestionById(Long.valueOf(id));
+        List<CommentQuestion> commentQuestions = this.commentQuestionService.findAllByParentQuestionId(question.getId());
+
         model.addAttribute("question", question);
+        model.addAttribute("commentsQuestion", commentQuestions);
+        model.addAttribute("loggedUser", loggedUser);
+
         return "question-profile";
     }
 
@@ -43,7 +67,7 @@ public class QuestionController {
 
         User loggedUser = this.userService.findUserByUsername(username);
         if (loggedUser != null ) {
-            model.addAttribute("loggedUser", loggedUser); //ajouté pour la deuxième facon de faire
+            model.addAttribute("loggedUser", loggedUser);
             question.setAuthor(loggedUser);
             return "question-form";
         }
@@ -53,6 +77,8 @@ public class QuestionController {
 
     @PostMapping("/create")
     public String processForm(@ModelAttribute(name="question") @Valid Question question,
+                              @RequestParam(name = "loggedUser") String loggedUser,
+                              CommentQuestion commentQuestion,
                               BindingResult bindingResult,
                               Model model) {
 
@@ -63,10 +89,10 @@ public class QuestionController {
 
         Question createdQuestion = this.questionService.save(question);
         model.addAttribute("createdQuestion", createdQuestion);
+        model.addAttribute("commentsQuestion", this.commentQuestionService.findAllByParentQuestionId(createdQuestion.getId()));
+        model.addAttribute("loggedUser", loggedUser);
         return "question-profile";
     }
-
-
 
     @GetMapping("/questions")
     public String questions(Model model,

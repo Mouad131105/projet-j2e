@@ -28,6 +28,7 @@ public class Question {
     @Size(max = 255)
     private String topic;
 
+    @NotBlank(message = "Topic cannot be empty.")
     @Size(max = 255)
     private String content;
 

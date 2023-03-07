@@ -2,40 +2,37 @@ package fr.uge.jee.ugeoverflow.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "Answers")
-public class Answer {
+@Table(name = "CommentQuestion")
+public class CommentQuestion {
     @GeneratedValue
     @Id
     private long id;
 
-    @NotNull
+    @NotNull(message = "Author cannot be null.")
     @ManyToOne
-    //@JoinColumn(name = "Answer_Id")
     private User author;
 
+    @NotNull(message = "Parent question cannot be null.")
     @ManyToOne
-    //@JoinColumn(name = "Question_Id")
     private Question parentQuestion;
 
-    @NotNull
-    @Positive
-    private long score = 0;
+    @NotBlank(message = "Content cannot be empty.")
+    @Size(max = 255)
+    private String content;
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime date = LocalDateTime.now();
-
-    private int upVotes;
-    private int downVotes;
-    private int comments;
 }
