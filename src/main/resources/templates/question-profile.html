@@ -34,7 +34,7 @@
         </ul>
     </div>
 
-    <form th:action="@{/question/comment/question}" th:object="${commentQuestion}" method="post">
+    <form th:action="@{/comment/question}" th:object="${commentQuestion}" method="post">
         <input type="hidden" th:name="author.username" th:value="${loggedUser}">
         <input type="hidden" th:name="parentQuestion.id" th:value="${question.id}">
         <div class="form-group">
@@ -42,6 +42,33 @@
         </div>
         <button type="submit" class="btn btn-primary">Add comment</button>
     </form>
+
+    <!-- Affichage des answers -->
+    <div>
+        <div th:if="${answers.isEmpty()}">
+            <p>This question has no answer</p>
+        </div>
+        <div th:if="${!answers.isEmpty()}">
+            <ul>
+                <li th:each="answer : ${answers}">
+                    <p th:text="${answer.getContent()}"></p>
+                </li>
+            </ul>
+        </div>
+
+        <div>
+            <!-- Formulaire pour créer une nouvelle réponse -->
+            <form th:action="@{/answer/add}" th:object="${answer}" method="post">
+                <input type="hidden" th:name="author.username" th:value="${loggedUser}">
+                <input type="hidden" th:name="parentQuestion.id" th:value="${question.id}">
+                <div class="form-group">
+                    <textarea class="form-control" id="answerContent" th:name="content" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Répondre</button>
+            </form>
+        </div>
+    </div>
+
 
 </div>
 

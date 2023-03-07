@@ -1,6 +1,7 @@
 package fr.uge.jee.ugeoverflow.controller;
 
 import fr.uge.jee.ugeoverflow.entities.*;
+import fr.uge.jee.ugeoverflow.service.AnswerService;
 import fr.uge.jee.ugeoverflow.service.CommentQuestionService;
 import fr.uge.jee.ugeoverflow.service.QuestionService;
 import fr.uge.jee.ugeoverflow.service.UserService;
@@ -21,42 +22,31 @@ public class QuestionController {
     private final QuestionService questionService;
     private final UserService userService;
     private final CommentQuestionService commentQuestionService;
+    private final AnswerService answerService;
 
     public QuestionController(QuestionService questionService, UserService userService,
-                              CommentQuestionService commentQuestionService) {
+                              CommentQuestionService commentQuestionService, AnswerService answerService) {
         this.questionService = questionService;
         this.userService = userService;
         this.commentQuestionService = commentQuestionService;
-    }
-
-
-    @PostMapping("/comment/question")
-    public String processForm(@ModelAttribute(name="commentQuestion") @Valid CommentQuestion commentQuestion,
-                              BindingResult bindingResult,
-                              Model model) {
-
-        CommentQuestion newCommentQuestion = this.commentQuestionService.save(commentQuestion);
-        Question question = newCommentQuestion.getParentQuestion();
-        List<CommentQuestion> commentQuestions = this.commentQuestionService.findAllByParentQuestionId(question.getId());
-        model.addAttribute("question", question);
-        model.addAttribute("commentsQuestion", commentQuestions);
-        model.addAttribute("loggedUser", newCommentQuestion.getAuthor());
-
-        return "question-profile";
+        this.answerService = answerService;
     }
 
     @GetMapping("/profile/{id}")
     public String getProfile(@PathVariable("id") String id,
                              @RequestParam(name = "loggedUser") String loggedUser,
                              CommentQuestion commentQuestion,
+                             Answer answer,
                              Model model) {
 
         Question question = this.questionService.findQuestionById(Long.valueOf(id));
         List<CommentQuestion> commentQuestions = this.commentQuestionService.findAllByParentQuestionId(question.getId());
+        List<Answer> answers = this.answerService.findAllByParentQuestionId(question.getId());
 
         model.addAttribute("question", question);
         model.addAttribute("commentsQuestion", commentQuestions);
         model.addAttribute("loggedUser", loggedUser);
+        model.addAttribute("answers", answers);
 
         return "question-profile";
     }

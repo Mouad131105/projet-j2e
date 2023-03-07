@@ -5,8 +5,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 @Data
@@ -27,8 +26,12 @@ public class Answer {
     //@JoinColumn(name = "Question_Id")
     private Question parentQuestion;
 
+    @NotBlank(message = "Content cannot be empty.")
+    @Size(max = 255)
+    private String content;
+
     @NotNull
-    @Positive
+    @Min(value = 0)
     private long score = 0;
 
     @NotNull
