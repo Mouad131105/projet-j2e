@@ -89,13 +89,21 @@
 
 
             <div class="d-none" id="bloc3">
-                <p>Rechercher un tag</p>
+                <div class="col-md-11 text-center">
+                    <ul class="list-inline">
+                        <li th:each="tag : ${T(fr.uge.jee.ugeoverflow.entities.Tag).values()}" class="list-inline-item">
+                            <a th:href="@{/question/tag(tagName=${tag.name()}, loggedUser=${loggedUser.username})}">
+                                <span class="badge bg-secondary me-1" th:text="${tag.name()}"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
         </div>
     </div>
 
-    <script>
+    <script >
         const button1 = document.querySelector("#button1");
         const button2 = document.querySelector("#button2");
         const button3 = document.querySelector("#button3");
@@ -121,19 +129,6 @@
             bloc3.classList.remove("d-none");
         });
 
-
     </script>
-
-    <!--  Exemple de select
-    <div>
-        <select th:field="*{allUsers}">
-            <option selected disabled hidden style='display: none' value=''></option>
-            <option th:each="user : ${allUsers}" th:value="${user}" th:text="${user.getUsername()}">
-            </option>
-        </select>
-
-        <button type="submit">submit</button>
-    </div>
-    -->
 
 </html>

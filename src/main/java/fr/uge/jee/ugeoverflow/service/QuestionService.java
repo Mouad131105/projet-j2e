@@ -1,12 +1,14 @@
 package fr.uge.jee.ugeoverflow.service;
 
 import fr.uge.jee.ugeoverflow.entities.Question;
+import fr.uge.jee.ugeoverflow.entities.Tag;
 import fr.uge.jee.ugeoverflow.repository.QuestionRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class QuestionService {
@@ -27,6 +29,7 @@ public class QuestionService {
         return questionRepository.findByTopicContains(keyword,of);
     }
 
+    public Page<Question> findByTag(String tag, PageRequest of){ return questionRepository.findByTagsContaining(Set.of(Tag.valueOf(tag)),of);}
     public Question findQuestionById(Long id) {
         return this.questionRepository.findQuestionById(id);
     }

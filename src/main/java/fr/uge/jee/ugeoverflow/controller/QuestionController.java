@@ -128,4 +128,22 @@ public class QuestionController {
         model.addAttribute("currentPage", page);
         return "home-page";
     }
+    @GetMapping("/tag")
+    public String processTag(Model model,
+                             @RequestParam("tagName") String tagName,
+                             @RequestParam(name = "page", defaultValue = "0") int page,
+                             @RequestParam(name = "loggedUser") String loggedUser) {
+        List<User> users = this.userService.getAllUsers();
+        if(!users.isEmpty()){
+            model.addAttribute("allUsers",users);
+        }
+        User user = this.userService.findUserByUsername(loggedUser);
+        model.addAttribute("loggedUser", user);
+
+        Page<Question> questions = questionService.findByTag(tagName,PageRequest.of(page, 5));
+        model.addAttribute("listQuestions", questions.getContent());
+        model.addAttribute("pages", new int[questions.getTotalPages()]);
+        model.addAttribute("currentPage", page);
+        return "home-page";
+    }
 }
