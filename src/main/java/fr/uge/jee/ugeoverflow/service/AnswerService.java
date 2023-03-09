@@ -5,6 +5,7 @@ import fr.uge.jee.ugeoverflow.repository.AnswerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AnswerService {
@@ -19,5 +20,9 @@ public class AnswerService {
 
     public List<Answer> findAllByParentQuestionId(Long parentQuestionId){
         return this.answerRepository.findAllByParentQuestionId(parentQuestionId);
+    }
+
+    public Optional<Answer> findById(Long idAnswer){
+        return this.answerRepository.findById(idAnswer);
     }
 }

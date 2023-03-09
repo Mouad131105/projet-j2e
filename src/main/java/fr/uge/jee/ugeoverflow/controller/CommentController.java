@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/comment")
@@ -49,14 +50,15 @@ public class CommentController {
                               BindingResult bindingResult,
                               Model model) {
 
-        Answer answer = commentAnswer.getParentAnswer();
-        List<CommentAnswer> commentAnswers = answer.getCommentAnswers();
+        CommentAnswer comAnswer = this.commentAnswerService.save(commentAnswer);
+        Optional<Answer> answer = this.answerService.findById(commentAnswer.getParentAnswer().getId());
+        List<CommentAnswer> commentAnswers = answer.get().getCommentAnswers();
         commentAnswers.add(commentAnswer);
-        answer.setCommentAnswers(commentAnswers);
-        this.answerService.save(answer);
-        Long parentAnswerId = commentAnswer.getParentAnswer().getParentQuestion().getId();
-        String loggedUser = commentAnswer.getAuthor().getUsername();
+        answer.get().setCommentAnswers(commentAnswers);
+        Answer parentAnswer = this.answerService.save(answer.get());
+        long parentQuestionId = parentAnswer.getParentQuestion().getId();
+        String loggedUser = comAnswer.getAuthor().getUsername();
 
-        return "redirect:/question/profile/" + parentAnswerId + "?loggedUser=" + loggedUser;
+        return "redirect:/question/profile/" + parentQuestionId + "?loggedUser=" + loggedUser;
     }
 }
