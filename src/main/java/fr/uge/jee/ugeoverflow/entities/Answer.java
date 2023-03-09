@@ -41,12 +41,17 @@ public class Answer {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime date = LocalDateTime.now();
 
+    /*
     @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinTable(
             name = "Comment_Answers",
             joinColumns = @JoinColumn(name = "Answer_ID"),
             inverseJoinColumns = @JoinColumn(name = "Comment_Answer_ID")
     )
+    private List<CommentAnswer> commentAnswers = new ArrayList<>();
+    */
+
+    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
     private List<CommentAnswer> commentAnswers = new ArrayList<>();
 
     private int upVotes;

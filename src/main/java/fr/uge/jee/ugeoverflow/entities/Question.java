@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 import java.util.Set;
 
 
@@ -38,6 +39,9 @@ public class Question {
     @NotEmpty(message = "The question must contain at least one tag.")
     private Set<Tag> tags;
 
-    private int comments;
-    private int answers;
+    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<CommentAnswer> comments;
+
+    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Answer> answers;
 }

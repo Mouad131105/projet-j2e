@@ -75,9 +75,15 @@
                     </div>
 
                     <div th:if="${!answer.getCommentAnswers().isEmpty()}">
-                        <li th:each="commentAnswer : ${answer.getCommentAnswers()}">
-                            <p th:text="${commentAnswer.getContent()}"></p>
-                        </li>
+                        <table>
+                            <tbody>
+                            <tr th:each="comment : ${answer.getCommentAnswers()}">
+                                <td>
+                                    <p th:text="${comment.getContent()}"></p>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div th:if="${answer.getCommentAnswers().isEmpty()}">
                         <p>Pas de commentaire</p>
