@@ -36,6 +36,7 @@ public class QuestionController {
     public String getProfile(@PathVariable("id") String id,
                              @RequestParam(name = "loggedUser") String loggedUser,
                              CommentQuestion commentQuestion,
+
                              Answer answer,
                              Model model) {
 
