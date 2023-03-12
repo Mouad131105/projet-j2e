@@ -5,13 +5,16 @@ import fr.uge.jee.ugeoverflow.service.CommentQuestionService;
 import fr.uge.jee.ugeoverflow.service.QuestionService;
 import fr.uge.jee.ugeoverflow.service.UserService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -128,11 +131,12 @@ public class QuestionController {
         model.addAttribute("currentPage", page);
         return "home-page";
     }
+    
     @GetMapping("/tag")
-    public String processTag(Model model,
-                             @RequestParam("tagName") String tagName,
-                             @RequestParam(name = "page", defaultValue = "0") int page,
-                             @RequestParam(name = "loggedUser") String loggedUser) {
+    public String processTags(Model model,
+                              @RequestParam(name = "selectedTags") String selectedTags,
+                              @RequestParam(name = "page", defaultValue = "0") int page,
+                              @RequestParam(name = "loggedUser") String loggedUser) {
         List<User> users = this.userService.getAllUsers();
         if(!users.isEmpty()){
             model.addAttribute("allUsers",users);
@@ -140,7 +144,14 @@ public class QuestionController {
         User user = this.userService.findUserByUsername(loggedUser);
         model.addAttribute("loggedUser", user);
 
-        Page<Question> questions = questionService.findByTag(tagName,PageRequest.of(page, 5));
+        String[] tagsArray = selectedTags.split(",");
+        List<String> tagsList = Arrays.asList(tagsArray);
+        List<Question> allQuestions = new ArrayList<>();
+        for (String tag : tagsList) {
+            Page<Question> questions = questionService.findByTag(tag, PageRequest.of(page, 5));
+            allQuestions.addAll(questions.getContent());
+        }
+        Page<Question> questions = new PageImpl<>(allQuestions,PageRequest.of(page, 5), allQuestions.size());
         model.addAttribute("listQuestions", questions.getContent());
         model.addAttribute("pages", new int[questions.getTotalPages()]);
         model.addAttribute("currentPage", page);
