@@ -2,6 +2,7 @@ package fr.uge.jee.ugeoverflow.user;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "Users")
 public class User {
-    private static final String USERNAME_REGEX = "^[A-Za-z][\\w]{4,29}$";
+    private static final String USERNAME_REGEX = "(^[A-Za-z][\\w]{4,29}$)|(admin)";
     private static final String PASSWORD_REGEX = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$";
 
     @NotBlank(message = "Username is mandatory")
@@ -34,7 +35,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(orphanRemoval = true)
+    // Without eager => LazyInitException throwing by Hibernate within CustomUserDetailsService
+    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinTable(
             name = "Followed_Users",
             joinColumns = @JoinColumn(name = "User_Username"),
@@ -45,4 +47,12 @@ public class User {
     //@Version
     private long confidenceScore;
 
+    public User(String username, String password, String email, Role role, Set<User> followedUsers, long confidenceScore) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.followedUsers = followedUsers;
+        this.confidenceScore = confidenceScore;
+    }
 }

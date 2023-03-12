@@ -10,7 +10,7 @@ import javax.validation.constraints.NotEmpty;
 import java.util.Collections;
 
 @Controller
-@RequestMapping("/registration")
+@RequestMapping("/users")
 public class UserController {
     private UserService userService;
 
@@ -35,8 +35,8 @@ public class UserController {
         user.setFollowedUsers(Collections.emptySet());
         user.setRole(Role.AUTHENTIFIED);
         this.userService.save(user);
-        User savedUser = this.userService.findUserByUsername(user.getUsername());
-        model.addAttribute("user", savedUser);
+        //User savedUser = this.userService.findUserByUsername(user.getUsername());
+        model.addAttribute("user", user);
 
         return "user-registration";
     }
@@ -61,5 +61,11 @@ public class UserController {
 
         return "login-form";
     }
+
+    @GetMapping("/user/profile")
+    public String successfulRegistration() {
+        return "home-page";
+    }
+
 
 }

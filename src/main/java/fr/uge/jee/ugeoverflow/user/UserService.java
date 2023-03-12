@@ -2,8 +2,6 @@ package fr.uge.jee.ugeoverflow.user;
 
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-
 @Service
 public class UserService {
     UserRepository userRepository;
@@ -17,7 +15,7 @@ public class UserService {
     }
 
     public User findUserByUsername(String username) {
-        return this.userRepository.findUserByUsername(Objects.requireNonNull(username));
+        return this.userRepository.findUserByUsername(username);
     }
 
     public boolean existsUsername(String username) {

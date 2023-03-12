@@ -15,5 +15,4 @@ public class CommentAnswer {
     private final Answer parentAnswer;
     private String content;
     private LocalDateTime date;
-
 }

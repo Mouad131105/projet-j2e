@@ -3,7 +3,6 @@
 <h2>Pré-requis</h2>
 
 <ul>
-    <li>Tomcat 10.0;</li>
     <li>JDK 8/11;</li>
     <li>IntelliJ (SonarLint).</li>
 </ul>
@@ -17,6 +16,8 @@ Exécuter, dans le dossier `src\main\resources` où l'archive `h2-1.4.200.jar` e
 ``java -cp h2-1.4.200.jar org.h2.tools.Server -ifNotExists``
 
 Si tout va bien, cela une fenêtre sur la console H2 doit s'ouvrir. Si ce n'est pas le cas, vous pouvez accéder à la console en allant sur [http://localhost:8082](http://localhost:8082/) .
+
+<u>Remarque :</u> Si vous rencontrez un problème pour vous connecter à la base H2, essayez de télécharger à nouveau le jar en allant sur [https://mvnrepository.com/artifact/com.h2database/h2/2.1.214](https://mvnrepository.com/artifact/com.h2database/h2/2.1.214) .
 
 <h3>Configurer le serveur et la console H2 dans IntelliJ</h3>
 
