@@ -55,7 +55,6 @@ public class UserController {
         }
         return "user-profile";
     }
-
     @GetMapping("/profile/{username}")
     public String getProfile(@PathVariable("username") String username,
                                  @RequestParam(name = "loggedUser") String loggedUser,
