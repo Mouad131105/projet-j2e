@@ -7,7 +7,6 @@ import fr.uge.jee.ugeoverflow.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -111,7 +110,7 @@ public class QuestionController {
         model.addAttribute("listQuestions", questions.getContent());
         model.addAttribute("pages", new int[questions.getTotalPages()]);
         model.addAttribute("currentPage", page);
-        return "home-page";
+        return "home-page-questions";
     }
 
     @PostMapping("/search")
@@ -129,7 +128,7 @@ public class QuestionController {
         model.addAttribute("listQuestions", questions.getContent());
         model.addAttribute("pages", new int[questions.getTotalPages()]);
         model.addAttribute("currentPage", page);
-        return "home-page";
+        return "home-page-questions";
     }
     
     @GetMapping("/tag")
@@ -155,6 +154,6 @@ public class QuestionController {
         model.addAttribute("listQuestions", questions.getContent());
         model.addAttribute("pages", new int[questions.getTotalPages()]);
         model.addAttribute("currentPage", page);
-        return "home-page";
+        return "home-page-questions";
     }
 }

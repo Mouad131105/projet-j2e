@@ -16,6 +16,9 @@ public interface UserRepository extends CrudRepository<User, Long> {
     String getUserByPassword(String username);
     List<User> findAll();
 
+    @Query(value = "SELECT u.followedUsers FROM User u WHERE u.username = :username")
+    List<User> findAllFollowedUsersFromUser(@Param("username") String username);
+
     @Query(value = "SELECT q FROM Question q WHERE q.author.username = :username")
     List<Question> getAllQuestionFromUser(@Param("username") String username);
 }

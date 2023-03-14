@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="/webjars/bootstrap/5.1.2/css/bootstrap.min.css"/>
+</head>
+
+<div>
+    <h1>UGEOverflow</h1>
+    <h3><small class="text-muted" th:text="${'Welcome to your home page ' + loggedUser.getUsername()}"></small></h3>
+</div>
+
+<div>
+
+    <div class="container-fluid bg-light">
+        <div class="d-flex justify-content-center">
+            <form th:action="@{/registration/homepage/questions}" method="post">
+                <input type="hidden" name="loggedUser" th:value="${loggedUser.username}">
+                <button type="submit" class="btn btn-info me-2" id="button1">Questions</button>
+            </form>
+            <button class="btn btn-info me-2" id="button2">Users</button>
+            <form th:action="@{/registration/homepage/tags}" method="post">
+                <input type="hidden" name="loggedUser" th:value="${loggedUser.username}">
+                <button type="submit" class="btn btn-info" id="button3">Tags</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="bloc2">
+        <div class="container">
+            <div class="row row-cols-3 g-3">
+                <div th:each="user : ${allUsers}" class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${user.username}"></h5>
+                            <p class="card-text"><strong>Role:</strong> <span th:text="${user.role}"></span></p>
+                            <p class="card-text"><strong>Confidence score:</strong> <span
+                                    th:text="${user.confidenceScore}"></span></p>
+                            <a th:href="@{/registration/profile/{username}(username=${user.username},loggedUser=${loggedUser.username})}"
+                               class="stretched-link">See</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</html>

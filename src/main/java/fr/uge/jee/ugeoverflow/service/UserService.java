@@ -3,6 +3,8 @@ package fr.uge.jee.ugeoverflow.service;
 import fr.uge.jee.ugeoverflow.entities.Question;
 import fr.uge.jee.ugeoverflow.repository.UserRepository;
 import fr.uge.jee.ugeoverflow.entities.User;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -42,6 +44,9 @@ public class UserService {
         return this.userRepository.getAllQuestionFromUser(username);
     }
 
+    public List<User> findAllFollowedUsersFromUser(String username){
+        return this.userRepository.findAllFollowedUsersFromUser(username);
+    }
 
 
     @PostConstruct

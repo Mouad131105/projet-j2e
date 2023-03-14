@@ -62,10 +62,11 @@ public class UserController {
 
         User user = this.userService.findUserByUsername(username);
         User currentUser = this.userService.findUserByUsername(loggedUser);
+        List<User> followedUsers = this.userService.findAllFollowedUsersFromUser(currentUser.getUsername());
         if (user != null && currentUser != null) {
             model.addAttribute("user", user);
             model.addAttribute("loggedUser", currentUser);
-            if(currentUser.getFollowedUsers().contains(user)){
+            if(followedUsers.contains(user)){
                 model.addAttribute("isFollow", true);
             }else{
                 model.addAttribute("isFollow", false);
@@ -76,7 +77,7 @@ public class UserController {
         }
 
         model.addAttribute("selectedUserError", "User " + username + " cannot be found");
-        return "home-page";
+        return "home-page-questions";
     }
 
     @GetMapping("/register")
@@ -112,11 +113,6 @@ public class UserController {
                               @RequestParam(name = "password") @NotEmpty String password,
                                Model model) {
 
-        List<User> users = this.userService.getAllUsers();
-        if(!users.isEmpty()){
-            model.addAttribute("allUsers",users);
-        }
-
         User user = this.userService.findUserByUsername(username);
         if (user != null && user.getPassword().equals(password)) {
             model.addAttribute("loggedUser", user);
@@ -124,11 +120,44 @@ public class UserController {
             model.addAttribute("listQuestions", questions.getContent());
             model.addAttribute("pages", new int[questions.getTotalPages()]);
             model.addAttribute("currentPage", 0);
-            return "home-page";
+            return "home-page-questions";
         }
 
         model.addAttribute("loginError", "Username or password is incorrect");
 
         return "login-form";
+    }
+
+    @PostMapping("/homepage/questions")
+    public String homepageQuestions(@RequestParam(name = "loggedUser") String loggedUser,
+                                   Model model){
+        User user = this.userService.findUserByUsername(loggedUser);
+        model.addAttribute("loggedUser", user);
+        Page<Question> questions = questionService.findAll(0, 5);
+        model.addAttribute("listQuestions", questions.getContent());
+        model.addAttribute("pages", new int[questions.getTotalPages()]);
+        model.addAttribute("currentPage", 0);
+        return "home-page-questions";
+    }
+
+    @PostMapping("/homepage/users")
+    public String homepageUsers(@RequestParam(name = "loggedUser") String loggedUser,
+                                   Model model){
+
+        List<User> users = this.userService.getAllUsers();
+        User user = users.stream().filter(x -> x.getUsername().equals(loggedUser)).findFirst().orElse(null);
+        model.addAttribute("loggedUser", user);
+        if(!users.isEmpty()){
+            model.addAttribute("allUsers",users);
+        }
+        return "home-page-users";
+    }
+
+    @PostMapping("/homepage/tags")
+    public String homepageTags(@RequestParam(name = "loggedUser") String loggedUser,
+                               Model model){
+        User user = this.userService.findUserByUsername(loggedUser);
+        model.addAttribute("loggedUser", user);
+        return "home-page-tags";
     }
 }
