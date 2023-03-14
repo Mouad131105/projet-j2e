@@ -13,8 +13,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/question")
@@ -43,6 +46,7 @@ public class QuestionController {
         Question question = this.questionService.findQuestionById(Long.valueOf(id));
         List<CommentQuestion> commentQuestions = this.commentQuestionService.findAllByParentQuestionId(question.getId());
         List<Answer> answers = this.answerService.findAllByParentQuestionId(question.getId());
+        answers = answers.stream().sorted((a1, a2) -> Long.compare(a2.getScore(), a1.getScore())).collect(Collectors.toList());
 
         model.addAttribute("question", question);
         model.addAttribute("commentsQuestion", commentQuestions);
@@ -78,11 +82,11 @@ public class QuestionController {
             return "question-form";
         }
 
+        question.setAnswers(Collections.emptyList());
+        question.setComments(Collections.emptyList());
         Question createdQuestion = this.questionService.save(question);
-        model.addAttribute("createdQuestion", createdQuestion);
-        model.addAttribute("commentsQuestion", this.commentQuestionService.findAllByParentQuestionId(createdQuestion.getId()));
-        model.addAttribute("loggedUser", loggedUser);
-        return "question-profile";
+
+        return "redirect:/question/profile/" + createdQuestion.getId() + "?loggedUser=" + loggedUser;
     }
 
     @GetMapping("/questions")

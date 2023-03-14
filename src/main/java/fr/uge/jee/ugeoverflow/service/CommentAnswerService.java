@@ -17,7 +17,7 @@ public class CommentAnswerService {
         return this.commentAnswerRepository.save(commentAnswer);
     }
 
-    public List<CommentAnswer> findAllByParentAnswerId(Long parentAnswerId){
-        return this.commentAnswerRepository.findAllByParentAnswerId(parentAnswerId);
+    public List<CommentAnswer> findAllByParentAnswerParentQuestion_Id(Long parentAnswerId){
+        return this.commentAnswerRepository.findAllByParentAnswerParentQuestion_Id(parentAnswerId);
     }
 }

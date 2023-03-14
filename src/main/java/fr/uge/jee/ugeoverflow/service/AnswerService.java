@@ -22,7 +22,7 @@ public class AnswerService {
         return this.answerRepository.findAllByParentQuestionId(parentQuestionId);
     }
 
-    public Optional<Answer> findById(Long idAnswer){
-        return this.answerRepository.findById(idAnswer);
+    public Answer findAnswerById(Long idAnswer){
+        return this.answerRepository.findAnswerById(idAnswer);
     }
 }

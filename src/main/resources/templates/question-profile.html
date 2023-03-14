@@ -8,12 +8,13 @@
 
 <h1 th:text="${question.topic}"></h1>
 
-
-<div>
+<div> <!-- Affiche la question -->
     <tr th:each="tag: ${question.tags}">
         <td th:text="${tag}"></td>
     </tr>
     <p th:text="${question.content}"> </p>
+
+    <!-- Affiche les commentaires de la question -->
 
     <div th:if="${commentsQuestion.isEmpty()}">
         <p>This question has no comments</p>
@@ -36,6 +37,7 @@
 
     <form th:action="@{/comment/question}" th:object="${commentQuestion}" method="post">
         <input type="hidden" th:name="author.username" th:value="${loggedUser}">
+        <input type="hidden" th:name="loggedUser" th:value="${loggedUser}">
         <input type="hidden" th:name="parentQuestion.id" th:value="${question.id}">
         <div class="form-group">
             <textarea class="form-control" id="content" name="content" rows="3" th:field="*{content}"></textarea>
@@ -54,7 +56,7 @@
         </form>
     </div>
 
-    <!-- Affichage des answers -->
+     <!-- Affiche les answers de la question -->
     <div>
         <div th:if="${answers.isEmpty()}">
             <p>This question has no answer</p>
@@ -62,7 +64,25 @@
         <div th:if="${!answers.isEmpty()}">
             <ul>
                 <li th:each="answer : ${answers}">
-                    <p th:text="${answer.getContent()}"></p>
+                    <div>
+                        <div>
+                            <p th:text="${answer.getContent()}"></p>
+                        </div>
+                        <div>
+                            <form th:action="@{/vote/add/up}" method="post">
+                                <input type="hidden" th:name="answerId" th:value="${answer.getId()}">
+                                <input type="hidden" th:name="loggedUser" th:value="${loggedUser}">
+                                <button type="submit" class="btn btn-link">up</button>
+                            </form>
+                            <span th:text="${answer.getScore()}"></span>
+                            <form th:action="@{/vote/add/down}" method="post">
+                                <input type="hidden" th:name="answerId" th:value="${answer.getId()}">
+                                <input type="hidden" th:name="loggedUser" th:value="${loggedUser}">
+                                <button type="submit" class="btn btn-link">down</button>
+                            </form>
+                        </div>
+                    </div>
+
                     <div>
                         <form th:action="@{/comment/answer}" th:object="${commentAnswer}" method="post">
                             <input type="hidden" th:name="author.username" th:value="${loggedUser}">
@@ -73,6 +93,8 @@
                             <button type="submit" class="btn btn-primary">Add Comment</button>
                         </form>
                     </div>
+
+                     <!-- Affiche les commentaires des answers -->
 
                     <div th:if="${!answer.getCommentAnswers().isEmpty()}">
                         <table>

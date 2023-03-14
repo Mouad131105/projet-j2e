@@ -1,18 +1,37 @@
 package fr.uge.jee.ugeoverflow.entities;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Data
-@RequiredArgsConstructor
 @IdClass(VoteId.class)
+@NoArgsConstructor
+@Entity
+@Table(name = "Votes")
 public class Vote {
+
     @Id
-    private final User user;
+    @NotNull
+    @ManyToOne
+    private User user;
+
     @Id
-    private final Answer answer;
-    private final VoteType voteType;
+    @NotNull
+    @ManyToOne
+    private Answer answer;
+
+    @Enumerated
+    //@ElementCollection(targetClass = VoteType.class, fetch = FetchType.EAGER)
+    @Column
+    @NotNull
+    private VoteType voteType;
+
+    public Vote(User user, Answer answer, VoteType voteType) {
+        this.user = user;
+        this.answer = answer;
+        this.voteType = voteType;
+    }
 }

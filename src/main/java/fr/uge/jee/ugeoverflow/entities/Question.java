@@ -40,7 +40,7 @@ public class Question {
     private Set<Tag> tags;
 
     @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<CommentAnswer> comments;
+    private List<CommentQuestion> comments;
 
     @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Answer> answers;

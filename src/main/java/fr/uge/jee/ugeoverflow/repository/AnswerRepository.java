@@ -3,6 +3,7 @@ package fr.uge.jee.ugeoverflow.repository;
 import fr.uge.jee.ugeoverflow.entities.Answer;
 import fr.uge.jee.ugeoverflow.entities.CommentQuestion;
 import fr.uge.jee.ugeoverflow.entities.Question;
+import fr.uge.jee.ugeoverflow.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,5 @@ import java.util.List;
 @Repository
 public interface AnswerRepository extends CrudRepository<Answer, Long> {
     List<Answer> findAllByParentQuestionId(Long parentQuestionId);
+    Answer findAnswerById(Long id);
 }
