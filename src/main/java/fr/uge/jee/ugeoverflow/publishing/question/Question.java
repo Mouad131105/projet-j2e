@@ -1,7 +1,7 @@
 package fr.uge.jee.ugeoverflow.publishing.question;
 
-import fr.uge.jee.ugeoverflow.publishing.Tag;
 import fr.uge.jee.ugeoverflow.user.User;
+import fr.uge.jee.ugeoverflow.publishing.Tag;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,23 +22,24 @@ public class Question {
     @Id
     private long id;
 
-    @NotBlank
+    @NotNull(message = "Author cannot be null.")
     @ManyToOne
     private User author;
 
-    @NotBlank
+    @NotBlank(message = "Topic cannot be empty.")
     @Size(max = 255)
     private String topic;
 
+    @NotBlank(message = "Topic cannot be empty.")
     @Size(max = 255)
     private String content;
 
     @Enumerated(EnumType.STRING)
-    @ElementCollection(targetClass = Tag.class)
-    @NotNull
-    @NotEmpty(message = "The question must contain at least one tag")
+    @ElementCollection(targetClass = Tag.class, fetch = FetchType.EAGER)
+    @NotNull(message = "Tags cannot be null.")
+    @NotEmpty(message = "The question must contain at least one tag.")
     private Set<Tag> tags;
+
     private int comments;
     private int answers;
-
 }

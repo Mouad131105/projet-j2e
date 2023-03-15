@@ -35,7 +35,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    // Without eager => LazyInitException throwing by Hibernate within CustomUserDetailsService
     @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinTable(
             name = "Followed_Users",
@@ -44,15 +43,14 @@ public class User {
     )
     private Set<User> followedUsers;
 
-    //@Version
-    private long confidenceScore;
+    /*@OneToMany(orphanRemoval = true)
+    private Set<Note> confidenceScore;*/
 
-    public User(String username, String password, String email, Role role, Set<User> followedUsers, long confidenceScore) {
+    public User(String username, String password, String email, Role role, Set<User> followedUsers) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.role = role;
         this.followedUsers = followedUsers;
-        this.confidenceScore = confidenceScore;
     }
 }

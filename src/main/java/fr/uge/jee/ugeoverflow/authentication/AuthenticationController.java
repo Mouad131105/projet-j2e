@@ -45,7 +45,7 @@ public class AuthenticationController {
         try {
             User user = this.authenticationService.getLoggedUser();
             model.addAttribute("loggedUser", user);
-            return "home-page";
+            return "redirect:/registration/homepage/questions";
         } catch (AuthenticationException exception) {
             return "login-form";
         }

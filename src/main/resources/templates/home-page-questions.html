@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="/webjars/bootstrap/5.1.2/css/bootstrap.min.css"/>
+</head>
+
+<div>
+    <h1>UGEOverflow</h1>
+    <h3><small class="text-muted" th:text="${'Welcome to your home page ' + loggedUser.getUsername()}"></small></h3>
+    <a th:href="@{/authentication/logout}">Logout</a>
+</div>
+
+<div>
+    <div class="container-fluid bg-light">
+        <div class="d-flex justify-content-center">
+            <button type="button" class="btn btn-info me-2" id="button1">Questions</button>
+            <form th:action="@{/registration/homepage/users}" method="post">
+                <input type="hidden" name="loggedUser" th:value="${loggedUser.username}">
+                <button type="submit" class="btn btn-info me-2" id="button2">Users</button>
+            </form>
+            <form th:action="@{/registration/homepage/tags}" method="post">
+                <input type="hidden" name="loggedUser" th:value="${loggedUser.username}">
+                <button type="submit" class="btn btn-info" id="button3">Tags</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container">
+        <hr>
+        <div class="mx-auto" style="width: 200px;"> <!-- Poser une nouvelle question -->
+            <form th:action="@{/question/create}" method="get">
+                <input type="hidden" th:name="username" th:value="${loggedUser.username}"/>
+                <input type="submit" value="New Question" class="btn btn-outline-primary"/>
+            </form>
+        </div>
+
+        <form method="post" th:action="@{/question/search}">
+            <input type="text" name="keyword">
+            <input type="hidden" name="loggedUser" th:value="${loggedUser.username}">
+            <button type="submit" class="btn btn-primary">Chercher</button>
+        </form>
+
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-group">
+                    <li th:each="question : ${listQuestions}" class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5>
+                                <a th:href="@{/question/profile/{id}(id=${question.id},loggedUser=${loggedUser.username})}"
+                                   class="stretched-link" th:text="${question.topic}"></a>
+                            </h5>
+                            <small th:text="${question.author.getUsername()}"></small>
+                        </div>
+                        <div class="mt-2">
+                            <span class="badge bg-secondary me-1" th:each="tag : ${question.tags}"
+                                  th:text="${tag}"></span>
+                        </div>
+                        <div class="d-flex justify-content-start">
+                            <span class="badge bg-light text-dark me-1" th:text="${question.id}"></span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <ul class="nav nav-pills">
+            <li th:each="page,status:${pages}">
+                <a th:class="${status.index==currentPage?'btn btn-primary ms-1':'btn btn-outline-primary ms-1'}"
+                   th:text="${status.index}"
+                   th:href="@{/question/questions(page=${status.index},loggedUser=${loggedUser.username})}"
+                ></a>
+            </li>
+        </ul>
+    </div>
+</div>
+</html>

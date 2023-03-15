@@ -37,8 +37,7 @@ public class Init {
                 this.passwordEncoder.encode(this.password),
                 this.email,
                 Role.ADMIN,
-                Collections.emptySet(),
-                0L
+                Collections.emptySet()
         );
         this.userService.save(admin);
     }

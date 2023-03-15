@@ -4,9 +4,9 @@ import fr.uge.jee.ugeoverflow.publishing.question.Question;
 import fr.uge.jee.ugeoverflow.user.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
@@ -31,10 +31,11 @@ public class Answer {
 
     @NotNull
     @Positive
-    private long score;
+    private long score = 0;
 
-    @NotBlank
-    private LocalDateTime date;
+    @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime date = LocalDateTime.now();
 
     private int upVotes;
     private int downVotes;
