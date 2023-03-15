@@ -1,9 +1,10 @@
-package fr.uge.jee.ugeoverflow.controller;
+package fr.uge.jee.ugeoverflow.publishing.question;
 
-import fr.uge.jee.ugeoverflow.entities.*;
-import fr.uge.jee.ugeoverflow.service.CommentQuestionService;
-import fr.uge.jee.ugeoverflow.service.QuestionService;
-import fr.uge.jee.ugeoverflow.service.UserService;
+import fr.uge.jee.ugeoverflow.publishing.Tag;
+import fr.uge.jee.ugeoverflow.publishing.comment.CommentQuestion;
+import fr.uge.jee.ugeoverflow.user.User;
+import fr.uge.jee.ugeoverflow.publishing.comment.CommentQuestionService;
+import fr.uge.jee.ugeoverflow.user.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;

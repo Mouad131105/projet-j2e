@@ -1,8 +1,6 @@
-package fr.uge.jee.ugeoverflow.service;
+package fr.uge.jee.ugeoverflow.publishing.question;
 
-import fr.uge.jee.ugeoverflow.entities.Question;
-import fr.uge.jee.ugeoverflow.entities.Tag;
-import fr.uge.jee.ugeoverflow.repository.QuestionRepository;
+import fr.uge.jee.ugeoverflow.publishing.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;

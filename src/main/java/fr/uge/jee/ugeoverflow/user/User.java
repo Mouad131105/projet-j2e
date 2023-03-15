@@ -1,4 +1,4 @@
-package fr.uge.jee.ugeoverflow.entities;
+package fr.uge.jee.ugeoverflow.user;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

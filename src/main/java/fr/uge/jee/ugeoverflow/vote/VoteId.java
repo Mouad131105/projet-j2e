@@ -1,7 +1,7 @@
-package fr.uge.jee.ugeoverflow.entities;
+package fr.uge.jee.ugeoverflow.vote;
 
-import fr.uge.jee.ugeoverflow.entities.Answer;
-import fr.uge.jee.ugeoverflow.entities.User;
+import fr.uge.jee.ugeoverflow.publishing.answer.Answer;
+import fr.uge.jee.ugeoverflow.user.User;
 import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;

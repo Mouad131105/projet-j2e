@@ -1,14 +1,9 @@
-package fr.uge.jee.ugeoverflow.repository;
+package fr.uge.jee.ugeoverflow.note;
 
-import fr.uge.jee.ugeoverflow.entities.Answer;
-import fr.uge.jee.ugeoverflow.entities.Note;
-import fr.uge.jee.ugeoverflow.entities.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface NoteRepository extends CrudRepository<Note, Long> {

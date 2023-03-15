@@ -1,11 +1,9 @@
-package fr.uge.jee.ugeoverflow.repository;
+package fr.uge.jee.ugeoverflow.publishing.question;
 
-import fr.uge.jee.ugeoverflow.entities.Question;
-import fr.uge.jee.ugeoverflow.entities.Tag;
+import fr.uge.jee.ugeoverflow.publishing.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.validation.constraints.NotEmpty;

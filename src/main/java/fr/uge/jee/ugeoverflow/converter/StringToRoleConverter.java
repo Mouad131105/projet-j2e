@@ -1,6 +1,6 @@
 package fr.uge.jee.ugeoverflow.converter;
 
-import fr.uge.jee.ugeoverflow.entities.Role;
+import fr.uge.jee.ugeoverflow.user.Role;
 import org.springframework.core.convert.converter.Converter;
 
 public class StringToRoleConverter implements Converter<String, Role> {

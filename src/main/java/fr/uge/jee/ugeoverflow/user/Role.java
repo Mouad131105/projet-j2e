@@ -1,4 +1,4 @@
-package fr.uge.jee.ugeoverflow.entities;
+package fr.uge.jee.ugeoverflow.user;
 
 public enum Role {
     ADMIN,

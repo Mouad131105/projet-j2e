@@ -1,4 +1,4 @@
-package fr.uge.jee.ugeoverflow.entities;
+package fr.uge.jee.ugeoverflow.publishing;
 public enum Tag {
     JAVA,
     CONCURRENCY,

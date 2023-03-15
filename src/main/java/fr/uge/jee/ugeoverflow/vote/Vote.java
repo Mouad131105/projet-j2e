@@ -1,5 +1,7 @@
-package fr.uge.jee.ugeoverflow.entities;
+package fr.uge.jee.ugeoverflow.vote;
 
+import fr.uge.jee.ugeoverflow.publishing.answer.Answer;
+import fr.uge.jee.ugeoverflow.user.User;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 

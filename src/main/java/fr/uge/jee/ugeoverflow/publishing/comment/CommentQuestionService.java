@@ -1,7 +1,7 @@
-package fr.uge.jee.ugeoverflow.service;
+package fr.uge.jee.ugeoverflow.publishing.comment;
 
-import fr.uge.jee.ugeoverflow.entities.CommentQuestion;
-import fr.uge.jee.ugeoverflow.repository.CommentQuestionRepository;
+import fr.uge.jee.ugeoverflow.publishing.comment.CommentQuestion;
+import fr.uge.jee.ugeoverflow.publishing.comment.CommentQuestionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

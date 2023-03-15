@@ -1,5 +1,6 @@
-package fr.uge.jee.ugeoverflow.entities;
+package fr.uge.jee.ugeoverflow.note;
 
+import fr.uge.jee.ugeoverflow.user.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

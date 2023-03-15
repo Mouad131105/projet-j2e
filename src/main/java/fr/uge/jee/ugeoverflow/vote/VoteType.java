@@ -1,4 +1,4 @@
-package fr.uge.jee.ugeoverflow.entities;
+package fr.uge.jee.ugeoverflow.vote;
 
 public enum VoteType {
     UP_VOTE(1),
