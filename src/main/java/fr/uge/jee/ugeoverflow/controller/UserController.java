@@ -1,5 +1,6 @@
 package fr.uge.jee.ugeoverflow.controller;
 
+import fr.uge.jee.ugeoverflow.entities.Note;
 import fr.uge.jee.ugeoverflow.entities.Question;
 import fr.uge.jee.ugeoverflow.entities.Role;
 import fr.uge.jee.ugeoverflow.entities.User;
@@ -28,6 +29,24 @@ public class UserController {
         this.questionService = questionService;
     }
 
+    /*@PostMapping("/note")
+    public String processNote(@RequestParam("userFollow") String username,
+                                @RequestParam("loggedUser") String loggedUser,
+                              @RequestParam("loggedUser") Long selectedNote,
+                                Model model) {
+        User user = this.userService.findUserByUsername(username);
+        User currentUser = this.userService.findUserByUsername(loggedUser);
+        Set<Note> notes = user.getConfidenceScore();
+        Note newNote = new Note();
+        newNote.setReceiverUsername(username);
+        newNote.setScore(selectedNote);
+        newNote.setAuthor(currentUser);
+        notes.add(newNote);
+        user.setConfidenceScore(notes);
+        this.userService.save(user);
+    }*/
+
+
     @PostMapping("/follow")
     public String processFollow(@RequestParam("userFollow") String userFollow,
                                 @RequestParam("loggedUser") String loggedUser,
@@ -38,7 +57,7 @@ public class UserController {
         if (user != null) {
             model.addAttribute("user", user);
             model.addAttribute("loggedUser", currentUser);
-            Set<User> followedUsers = currentUser.getFollowedUsers();
+            Set<User> followedUsers = this.userService.findAllFollowedUsersFromUser(currentUser.getUsername());
             if(followedUsers.contains(user)){
                 followedUsers.remove(user);
                 currentUser.setFollowedUsers(followedUsers);
@@ -62,10 +81,18 @@ public class UserController {
 
         User user = this.userService.findUserByUsername(username);
         User currentUser = this.userService.findUserByUsername(loggedUser);
-        List<User> followedUsers = this.userService.findAllFollowedUsersFromUser(currentUser.getUsername());
+
+        Note note = this.userService.findNoteFromReceiverAndAuthor(user.getUsername(), currentUser.getUsername());
+
         if (user != null && currentUser != null) {
             model.addAttribute("user", user);
             model.addAttribute("loggedUser", currentUser);
+            if(note != null){
+                model.addAttribute("note", note.getScore());
+            }else{
+                model.addAttribute("note", null);
+            }
+            Set<User> followedUsers = this.userService.findAllFollowedUsersFromUser(currentUser.getUsername());
             if(followedUsers.contains(user)){
                 model.addAttribute("isFollow", true);
             }else{
@@ -93,7 +120,7 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "registration-form";
         }
-        user.setConfidenceScore(0L);
+        //user.setConfidenceScore(Collections.emptySet());
         user.setFollowedUsers(Collections.emptySet());
         user.setRole(Role.AUTHENTIFIED);
         this.userService.save(user);

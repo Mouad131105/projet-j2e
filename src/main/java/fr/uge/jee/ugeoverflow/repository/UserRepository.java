@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
@@ -17,7 +18,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
     List<User> findAll();
 
     @Query(value = "SELECT u.followedUsers FROM User u WHERE u.username = :username")
-    List<User> findAllFollowedUsersFromUser(@Param("username") String username);
+    Set<User> findAllFollowedUsersFromUser(@Param("username") String username);
 
     @Query(value = "SELECT q FROM Question q WHERE q.author.username = :username")
     List<Question> getAllQuestionFromUser(@Param("username") String username);

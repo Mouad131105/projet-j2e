@@ -1,23 +1,26 @@
 package fr.uge.jee.ugeoverflow.service;
 
+import fr.uge.jee.ugeoverflow.entities.Note;
 import fr.uge.jee.ugeoverflow.entities.Question;
+import fr.uge.jee.ugeoverflow.repository.NoteRepository;
 import fr.uge.jee.ugeoverflow.repository.UserRepository;
 import fr.uge.jee.ugeoverflow.entities.User;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Service
 public class UserService {
     UserRepository userRepository;
+    NoteRepository noteRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, NoteRepository noteRepository) {
         this.userRepository = userRepository;
+        this.noteRepository = noteRepository;
     }
 
     public User save(User user) {
@@ -44,8 +47,11 @@ public class UserService {
         return this.userRepository.getAllQuestionFromUser(username);
     }
 
-    public List<User> findAllFollowedUsersFromUser(String username){
+    public Set<User> findAllFollowedUsersFromUser(String username){
         return this.userRepository.findAllFollowedUsersFromUser(username);
+    }
+    public Note findNoteFromReceiverAndAuthor(String receiver, String author){
+        return this.noteRepository.findNoteFromReceiverAndAuthor(receiver, author);
     }
 
 

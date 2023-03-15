@@ -35,8 +35,6 @@
                         <div class="card-body">
                             <h5 class="card-title" th:text="${user.username}"></h5>
                             <p class="card-text"><strong>Role:</strong> <span th:text="${user.role}"></span></p>
-                            <p class="card-text"><strong>Confidence score:</strong> <span
-                                    th:text="${user.confidenceScore}"></span></p>
                             <a th:href="@{/registration/profile/{username}(username=${user.username},loggedUser=${loggedUser.username})}"
                                class="stretched-link">See</a>
                         </div>

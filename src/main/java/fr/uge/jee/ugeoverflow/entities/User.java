@@ -42,6 +42,6 @@ public class User {
     )
     private Set<User> followedUsers;
 
-    //@Version
-    private long confidenceScore;
+    /*@OneToMany(orphanRemoval = true)
+    private Set<Note> confidenceScore;*/
 }
