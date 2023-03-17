@@ -4,7 +4,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link th:href="@{message.css}" rel="stylesheet" />
     </head>
-    <form th:action="@{/authentication/profile}" method="post">
+    <form th:action="@{/authentication/login}" method="post">
         <h2>Sign in</h2>
 
         <div th:class="error" th:if="${loginError != null}" th:text="${loginError}"/>

@@ -33,15 +33,17 @@ public class AuthenticationController {
         if (authentication != null){
             new SecurityContextLogoutHandler().logout(request, response, authentication);
         }
-        return "redirect:/authentication/login";
+        return "redirect:/login";
+        //return "login-form";
     }
 
-    @PostMapping("/profile")
+    @GetMapping("/profile")
     public String homePage(Model model) {
         try {
             User user = this.authenticationService.getLoggedUser();
             model.addAttribute("loggedUser", user);
             return "redirect:/users/homepage/questions";
+            //return "home-page";
         } catch (AuthenticationException exception) {
             return "login-form";
         }

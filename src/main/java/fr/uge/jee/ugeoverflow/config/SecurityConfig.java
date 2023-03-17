@@ -27,10 +27,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 //.loginProcessingUrl("/authentication/login")
                 //.defaultSuccessUrl("/authentication/profile", true)
-                .authorizeRequests()
-                .mvcMatchers("/question/create")
-                .authenticated()
-                .anyRequest().permitAll()
+                .csrf().and().cors().disable()
+                .authorizeRequests().anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/authentication/login")
