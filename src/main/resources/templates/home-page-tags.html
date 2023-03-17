@@ -14,11 +14,11 @@
 <div>
     <div class="container-fluid bg-light">
         <div class="d-flex justify-content-center">
-            <form th:action="@{/registration/homepage/questions}" method="post">
+            <form th:action="@{/users/homepage/questions}" method="post">
                 <input type="hidden" name="loggedUser" th:value="${loggedUser.username}">
                 <button type="submit" class="btn btn-info me-2" id="button1">Questions</button>
             </form>
-            <form th:action="@{/registration/homepage/users}" method="post">
+            <form th:action="@{/users/homepage/users}" method="post">
                 <input type="hidden" name="loggedUser" th:value="${loggedUser.username}">
                 <button type="submit" class="btn btn-info me-2" id="button2">Users</button>
             </form>
@@ -32,7 +32,7 @@
         <div class="col-md-11 text-center">
             <form th:action="@{/question/tag}" method="get">
                 <ul class="list-inline">
-                    <li th:each="tag : ${T(fr.uge.jee.ugeoverflow.entities.Tag).values()}" class="list-inline-item">
+                    <li th:each="tag : ${T(fr.uge.jee.ugeoverflow.publishing.Tag).values()}" class="list-inline-item">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox"
                                    th:id="${'tag_' + tag.name()}"

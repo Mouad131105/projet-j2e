@@ -7,6 +7,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +36,7 @@ public class AuthenticationController {
         return "redirect:/authentication/login";
     }
 
-    @GetMapping("/profile")
+    @PostMapping("/profile")
     public String homePage(Model model) {
         try {
             User user = this.authenticationService.getLoggedUser();

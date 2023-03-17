@@ -7,8 +7,12 @@ import fr.uge.jee.ugeoverflow.publishing.question.QuestionService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
+import javax.validation.Valid;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -75,22 +79,26 @@ public class UserController {
         User user = this.userService.findUserByUsername(username);
         User currentUser = this.authenticationService.getLoggedUser();
 
-        Note note = this.userService.findNoteFromReceiverAndAuthor(user.getUsername(), currentUser.getUsername());
+        /*Note note = this.userService.findNoteFromReceiverAndAuthor(user.getUsername(), currentUser.getUsername());
+        if(note != null){
+            model.addAttribute("note", note.getScore());
+        }else{
+            model.addAttribute("note", null);
+        }*/
 
+        Set<User> followedUsers = this.userService.findAllFollowedUsersFromUser(currentUser.getUsername());
+
+        if(followedUsers.contains(user)){
+            model.addAttribute("isFollow", true);
+        }else{
+            model.addAttribute("isFollow", false);
+        }
+
+        System.out.println("after");
+        System.out.println(followedUsers);
         if (user != null && currentUser != null) {
             model.addAttribute("user", user);
             model.addAttribute("loggedUser", currentUser);
-            if(note != null){
-                model.addAttribute("note", note.getScore());
-            }else{
-                model.addAttribute("note", null);
-            }
-            Set<User> followedUsers = this.userService.findAllFollowedUsersFromUser(currentUser.getUsername());
-            if(followedUsers.contains(user)){
-                model.addAttribute("isFollow", true);
-            }else{
-                model.addAttribute("isFollow", false);
-            }
             List<Question> questions = this.userService.getAllQuestionFromUser(user.getUsername());
             model.addAttribute("questions", questions);
             return "user-profile";
@@ -100,7 +108,7 @@ public class UserController {
         return "home-page-questions";
     }
 
-    /*@GetMapping("/register")
+    @GetMapping("/register")
     public String userForm(User user) {
         return "registration-form";
     }
@@ -123,7 +131,7 @@ public class UserController {
         return "user-registration";
     }
 
-    @GetMapping("/login")
+    /*@GetMapping("/login")
     public String loginForm() {
         return "login-form";
     }
@@ -148,7 +156,7 @@ public class UserController {
         return "login-form";
     }*/
 
-    @GetMapping("/homepage/questions")
+    @RequestMapping(value = "/homepage/questions", method = {RequestMethod.POST, RequestMethod.GET})
     public String homepageQuestions(Model model){
         User user = this.authenticationService.getLoggedUser();
         model.addAttribute("loggedUser", user);

@@ -35,7 +35,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(orphanRemoval = true)
     @JoinTable(
             name = "Followed_Users",
             joinColumns = @JoinColumn(name = "User_Username"),
