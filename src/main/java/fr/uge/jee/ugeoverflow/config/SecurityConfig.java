@@ -27,7 +27,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 //.loginProcessingUrl("/authentication/login")
                 //.defaultSuccessUrl("/authentication/profile", true)
-                .authorizeRequests().anyRequest().authenticated()
+                .authorizeRequests()
+                .mvcMatchers("/question/create")
+                .authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .formLogin()
                 .loginPage("/authentication/login")
@@ -38,6 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("authentication/logout")
                 .logoutSuccessUrl("/authentication/login");
     }
+
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

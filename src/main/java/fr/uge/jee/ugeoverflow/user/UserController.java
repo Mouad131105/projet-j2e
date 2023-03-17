@@ -46,7 +46,6 @@ public class UserController {
 
     @PostMapping("/follow")
     public String processFollow(@RequestParam("userFollow") String userFollow, Model model) {
-
         User user = this.userService.findUserByUsername(userFollow);
         User currentUser = this.authenticationService.getLoggedUser();
         if (user != null) {
