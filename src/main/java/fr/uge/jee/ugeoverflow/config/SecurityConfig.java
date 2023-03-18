@@ -1,12 +1,14 @@
 package fr.uge.jee.ugeoverflow.config;
 
 import fr.uge.jee.ugeoverflow.security.CustomAuthenticationProvider;
+import fr.uge.jee.ugeoverflow.user.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
@@ -19,7 +21,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        //PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         auth.authenticationProvider(this.customAuthenticationProvider);
+                //.inMemoryAuthentication()
+                ///.withUser("amyr")
+                //.password("{noop}amyr")
+                //.authorities(Role.ADMIN.name());
     }
 
     @Override
@@ -32,11 +39,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/authentication/login")
-                .defaultSuccessUrl("/authentication/profile")
+                .successForwardUrl("/users/homepage/questions")
+                .failureForwardUrl("/authentication/login")
+                //.defaultSuccessUrl("/authentication/login")
                 .permitAll()
                 .and()
                 .logout()
-                .logoutUrl("authentication/logout")
+                .logoutUrl("/authentication/logout")
+                //.invalidateHttpSession(true)
+                .deleteCookies()
                 .logoutSuccessUrl("/authentication/login");
     }
 

@@ -7,7 +7,6 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,13 +27,11 @@ public class AuthenticationController {
     }
 
     @GetMapping("/logout")
-    public String processLogout(HttpServletRequest request, HttpServletResponse response) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public String processLogout(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
         if (authentication != null){
             new SecurityContextLogoutHandler().logout(request, response, authentication);
         }
-        return "redirect:/login";
-        //return "login-form";
+        return "redirect:/login?logout";
     }
 
     @GetMapping("/profile")
