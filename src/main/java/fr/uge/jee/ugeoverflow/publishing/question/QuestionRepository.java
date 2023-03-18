@@ -16,7 +16,7 @@ import java.util.Set;
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     Page<Question> findByTopicContains(String kw, Pageable pageable);
     Question findQuestionById(Long id);
-
     Page<Question> findByTagsContaining(@NotNull(message = "Tags cannot be null.") @NotEmpty(message = "The question must contain at least one tag.") Set<Tag> tags, Pageable pageable);
     List<Question> findByAuthor(User author);
+    List<Question> findByAuthorAndTopicContains(User user, String keyword);
 }

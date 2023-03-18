@@ -48,6 +48,23 @@ public class QuestionService {
         }
         return sortedQuestions;
     }
+    public List<Question> getQuestionsByUser(User user, String keyword) {
+        return questionRepository.findByAuthorAndTopicContains(user, keyword);
+    }
+    public List<Question> getSortedQuestionsByFollowing(User loggedUser, String keyword) {
+        List<User> following = new ArrayList<>(loggedUser.getFollowedUsers());
+        List<Question> sortedQuestions = new ArrayList<>();
+
+        for (User user : following) {
+            sortedQuestions.addAll(getQuestionsByUser(user, keyword));
+        }
+        for (User user : following) {
+            for (User followedUser : user.getFollowedUsers()) {
+                sortedQuestions.addAll(getQuestionsByUser(followedUser, keyword));
+            }
+        }
+        return sortedQuestions;
+    }
     public Question findQuestionById(Long id) {
         return this.questionRepository.findQuestionById(id);
     }
