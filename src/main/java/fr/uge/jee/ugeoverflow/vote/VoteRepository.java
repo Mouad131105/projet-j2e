@@ -1,4 +1,4 @@
-package fr.uge.jee.ugeoverflow.publishing.comment;
+package fr.uge.jee.ugeoverflow.vote;
 
 
 import fr.uge.jee.ugeoverflow.vote.Vote;

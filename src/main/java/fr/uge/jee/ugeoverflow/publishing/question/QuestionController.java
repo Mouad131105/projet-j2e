@@ -3,7 +3,7 @@ package fr.uge.jee.ugeoverflow.publishing.question;
 import fr.uge.jee.ugeoverflow.publishing.Tag;
 import fr.uge.jee.ugeoverflow.publishing.answer.Answer;
 import fr.uge.jee.ugeoverflow.publishing.comment.CommentQuestion;
-import fr.uge.jee.ugeoverflow.service.AnswerService;
+import fr.uge.jee.ugeoverflow.publishing.answer.AnswerService;
 import fr.uge.jee.ugeoverflow.user.User;
 import fr.uge.jee.ugeoverflow.publishing.comment.CommentQuestionService;
 import fr.uge.jee.ugeoverflow.user.UserService;

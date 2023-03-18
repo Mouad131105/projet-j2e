@@ -1,10 +1,10 @@
-package fr.uge.jee.ugeoverflow.controller;
+package fr.uge.jee.ugeoverflow.publishing.answer;
 
 
 import fr.uge.jee.ugeoverflow.publishing.answer.Answer;
 import fr.uge.jee.ugeoverflow.publishing.comment.CommentQuestionService;
 import fr.uge.jee.ugeoverflow.publishing.question.QuestionService;
-import fr.uge.jee.ugeoverflow.service.AnswerService;
+import fr.uge.jee.ugeoverflow.publishing.answer.AnswerService;
 import fr.uge.jee.ugeoverflow.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

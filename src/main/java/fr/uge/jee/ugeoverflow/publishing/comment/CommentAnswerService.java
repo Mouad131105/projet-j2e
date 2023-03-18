@@ -1,4 +1,4 @@
-package fr.uge.jee.ugeoverflow.service;
+package fr.uge.jee.ugeoverflow.publishing.comment;
 
 
 import fr.uge.jee.ugeoverflow.publishing.comment.CommentAnswer;

@@ -8,6 +8,6 @@ import fr.uge.jee.ugeoverflow.user.User;
 import java.io.Serializable;
 
 public class VoteId implements Serializable {
-    private User user;
-    private Answer answer;
+    private String user;
+    private Long answer;
 }

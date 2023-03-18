@@ -1,7 +1,7 @@
-package fr.uge.jee.ugeoverflow.service;
+package fr.uge.jee.ugeoverflow.publishing.answer;
 
 import fr.uge.jee.ugeoverflow.publishing.answer.Answer;
-import fr.uge.jee.ugeoverflow.repository.AnswerRepository;
+import fr.uge.jee.ugeoverflow.publishing.answer.AnswerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

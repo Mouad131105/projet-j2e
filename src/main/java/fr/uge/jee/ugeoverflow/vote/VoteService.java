@@ -1,8 +1,6 @@
-package fr.uge.jee.ugeoverflow.service;
+package fr.uge.jee.ugeoverflow.vote;
 
 
-import fr.uge.jee.ugeoverflow.publishing.comment.VoteRepository;
-import fr.uge.jee.ugeoverflow.vote.Vote;
 import org.springframework.stereotype.Service;
 
 

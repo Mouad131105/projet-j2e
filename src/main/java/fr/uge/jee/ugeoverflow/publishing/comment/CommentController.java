@@ -1,11 +1,11 @@
-package fr.uge.jee.ugeoverflow.controller;
+package fr.uge.jee.ugeoverflow.publishing.comment;
 
 import fr.uge.jee.ugeoverflow.publishing.answer.Answer;
 import fr.uge.jee.ugeoverflow.publishing.comment.CommentAnswer;
 import fr.uge.jee.ugeoverflow.publishing.comment.CommentQuestion;
 import fr.uge.jee.ugeoverflow.publishing.comment.CommentQuestionService;
-import fr.uge.jee.ugeoverflow.service.AnswerService;
-import fr.uge.jee.ugeoverflow.service.CommentAnswerService;
+import fr.uge.jee.ugeoverflow.publishing.answer.AnswerService;
+import fr.uge.jee.ugeoverflow.publishing.comment.CommentAnswerService;
 import fr.uge.jee.ugeoverflow.user.User;
 import fr.uge.jee.ugeoverflow.user.UserService;
 import org.springframework.stereotype.Controller;
