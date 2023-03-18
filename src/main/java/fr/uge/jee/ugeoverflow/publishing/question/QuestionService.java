@@ -65,6 +65,24 @@ public class QuestionService {
         }
         return sortedQuestions;
     }
+    public List<Question> getQuestionsByUser(User user, Tag tag) {
+        return questionRepository.findByAuthorAndTagsContaining(user, Set.of(tag));
+    }
+    public List<Question> getSortedQuestionsByFollowing(User loggedUser, Tag tag) {
+        List<User> following = new ArrayList<>(loggedUser.getFollowedUsers());
+        List<Question> sortedQuestions = new ArrayList<>();
+
+        for (User user : following) {
+            sortedQuestions.addAll(getQuestionsByUser(user, tag));
+        }
+        for (User user : following) {
+            for (User followedUser : user.getFollowedUsers()) {
+                sortedQuestions.addAll(getQuestionsByUser(followedUser, tag));
+            }
+        }
+        return sortedQuestions;
+    }
+
     public Question findQuestionById(Long id) {
         return this.questionRepository.findQuestionById(id);
     }
