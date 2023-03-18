@@ -114,7 +114,7 @@ public class QuestionController {
         return "home-page-questions";
     }
 
-    @PostMapping("/search")
+    /*@PostMapping("/search")
     public String searchQuestion(Model model,
                                  @RequestParam(name = "page", defaultValue = "0") int page,
                                  @RequestParam(name = "keyword", defaultValue = "") String keyword,
@@ -130,8 +130,35 @@ public class QuestionController {
         model.addAttribute("pages", new int[questions.getTotalPages()]);
         model.addAttribute("currentPage", page);
         return "home-page-questions";
+    }*/
+    @PostMapping("/search")
+    public String searchQuestion(Model model,
+                                 @RequestParam(name = "page", defaultValue = "0") int page,
+                                 @RequestParam(name = "keyword", defaultValue = "") String keyword,
+                                 @RequestParam(name = "loggedUser") String loggedUser){
+        List<User> users = this.userService.getAllUsers();
+        if(!users.isEmpty()){
+            model.addAttribute("allUsers",users);
+        }
+        User user = this.userService.findUserByUsername(loggedUser);
+        model.addAttribute("loggedUser", user);
+
+        List<Question> sortedQuestions = questionService.getSortedQuestionsByFollowing(user, keyword);
+        List<Question> otherQuestions = (List<Question>) questionService.findByTopicContains(keyword, PageRequest.of(0, 5));
+
+        // Supprimez les questions déjà triées de la liste des autres questions
+        otherQuestions.removeAll(sortedQuestions);
+
+        // Ajoutez les autres questions après les questions triées
+        sortedQuestions.addAll(otherQuestions);
+
+        Page<Question> questions = new PageImpl<>(sortedQuestions, PageRequest.of(page, 5), sortedQuestions.size());
+        model.addAttribute("listQuestions", questions.getContent());
+        model.addAttribute("pages", new int[questions.getTotalPages()]);
+        model.addAttribute("currentPage", page);
+        return "home-page-questions";
     }
-    
+
     @GetMapping("/tag")
     public String processTags(Model model,
                               @RequestParam(name = "selectedTags") String selectedTags,
