@@ -1,5 +1,6 @@
 package fr.uge.jee.ugeoverflow.user;
 
+import fr.uge.jee.ugeoverflow.note.Note;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinTable(
             name = "Followed_Users",
             joinColumns = @JoinColumn(name = "User_Username"),
@@ -43,8 +44,8 @@ public class User {
     )
     private Set<User> followedUsers;
 
-    /*@OneToMany(orphanRemoval = true)
-    private Set<Note> confidenceScore;*/
+    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<Note> confidenceScore;
 
     public User(String username, String password, String email, Role role, Set<User> followedUsers) {
         this.username = username;

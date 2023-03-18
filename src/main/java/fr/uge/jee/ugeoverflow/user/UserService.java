@@ -8,6 +8,8 @@ import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +20,9 @@ import java.util.Set;
 public class UserService {
     UserRepository userRepository;
     NoteRepository noteRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public UserService(UserRepository userRepository, NoteRepository noteRepository) {
         this.userRepository = userRepository;
@@ -68,12 +73,6 @@ public class UserService {
         return followeduser;
     }*/
 
-
-    public Note findNoteFromReceiverAndAuthor(String receiver, String author){
-        return this.noteRepository.findNoteFromReceiverAndAuthor(receiver, author);
-    }
-
-
     @PostConstruct
     private void postConstruct() {
 
@@ -88,6 +87,6 @@ public class UserService {
 
         List<User> predefinedUsers = Arrays.asList(user1,user2,user3,user4,user5,user6,user7);
 
-        //userRepository.saveAll(predefinedUsers);
+        userRepository.saveAll(predefinedUsers);
     }
 }

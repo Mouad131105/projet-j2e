@@ -2,6 +2,7 @@ package fr.uge.jee.ugeoverflow.user;
 
 import fr.uge.jee.ugeoverflow.authentication.AuthenticationService;
 import fr.uge.jee.ugeoverflow.note.Note;
+import fr.uge.jee.ugeoverflow.note.NoteService;
 import fr.uge.jee.ugeoverflow.publishing.question.Question;
 import fr.uge.jee.ugeoverflow.publishing.question.QuestionService;
 import org.springframework.data.domain.Page;
@@ -9,8 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
@@ -22,30 +21,33 @@ public class UserController {
     private UserService userService;
     private QuestionService questionService;
     private AuthenticationService authenticationService;
+    private NoteService noteService;
 
     public UserController(UserService userService, QuestionService questionService,
-                          AuthenticationService authenticationService) {
+                          AuthenticationService authenticationService, NoteService noteService) {
         this.userService = userService;
         this.questionService = questionService;
         this.authenticationService = authenticationService;
+        this.noteService = noteService;
     }
 
-    /*@PostMapping("/note")
-    public String processNote(@RequestParam("userFollow") String username,
-                                @RequestParam("loggedUser") String loggedUser,
-                              @RequestParam("loggedUser") Long selectedNote,
-                                Model model) {
-        User user = this.userService.findUserByUsername(username);
-        User currentUser = this.userService.findUserByUsername(loggedUser);
-        Set<Note> notes = user.getConfidenceScore();
+    @PostMapping("/note")
+    public String processNote(@RequestParam("userFollow") String userFollow,
+                              @RequestParam("selectedNote") Long selectedNote,
+                              Model model) {
+        User currentUser = this.authenticationService.getLoggedUser();
+        Set<Note> notes = currentUser.getConfidenceScore();
         Note newNote = new Note();
-        newNote.setReceiverUsername(username);
+        newNote.setReceiverUsername(userFollow);
         newNote.setScore(selectedNote);
-        newNote.setAuthor(currentUser);
-        notes.add(newNote);
-        user.setConfidenceScore(notes);
-        this.userService.save(user);
-    }*/
+        newNote.setAuthorUsername(currentUser.getUsername());
+        Note note = this.noteService.save(newNote);
+        notes.add(note);
+        currentUser.setConfidenceScore(notes);
+        this.userService.save(currentUser);
+
+        return "redirect:/users/profile/" + userFollow;
+    }
 
 
     @PostMapping("/follow")
@@ -53,9 +55,7 @@ public class UserController {
         User user = this.userService.findUserByUsername(userFollow);
         User currentUser = this.authenticationService.getLoggedUser();
         if (user != null) {
-            model.addAttribute("user", user);
-            model.addAttribute("loggedUser", currentUser);
-            Set<User> followedUsers = this.userService.findAllFollowedUsersFromUser(currentUser.getUsername());
+            Set<User> followedUsers = currentUser.getFollowedUsers();
             if(followedUsers.contains(user)){
                 followedUsers.remove(user);
                 currentUser.setFollowedUsers(followedUsers);
@@ -67,37 +67,32 @@ public class UserController {
                 this.userService.save(currentUser);
                 model.addAttribute("isFollow", true);
             }
-            List<Question> questions = this.userService.getAllQuestionFromUser(user.getUsername());
-            model.addAttribute("questions", questions);
         }
-        return "user-profile";
+        return "redirect:/users/profile/" + userFollow;
     }
+
     @GetMapping("/profile/{username}")
     public String getProfile(@PathVariable("username") String username, Model model) {
 
         User user = this.userService.findUserByUsername(username);
         User currentUser = this.authenticationService.getLoggedUser();
-
-        /*Note note = this.userService.findNoteFromReceiverAndAuthor(user.getUsername(), currentUser.getUsername());
-        if(note != null){
-            model.addAttribute("note", note.getScore());
-        }else{
-            model.addAttribute("note", null);
-        }*/
-
-        Set<User> followedUsers = this.userService.findAllFollowedUsersFromUser(currentUser.getUsername());
-
-        if(followedUsers.contains(user)){
-            model.addAttribute("isFollow", true);
-        }else{
-            model.addAttribute("isFollow", false);
-        }
-
-        System.out.println("after");
-        System.out.println(followedUsers);
+        Set<User> followedUsers = currentUser.getFollowedUsers();
+        Note userNotes = currentUser.getConfidenceScore().stream().filter(x -> x.getReceiverUsername().equals(user.getUsername())).findFirst().orElse(null);
         if (user != null && currentUser != null) {
+            if(userNotes != null){
+                model.addAttribute("note", userNotes.getScore());
+            }else{
+                model.addAttribute("note", null);
+            }
             model.addAttribute("user", user);
             model.addAttribute("loggedUser", currentUser);
+
+            if(followedUsers.contains(user)){
+                model.addAttribute("isFollow", true);
+            }else{
+                model.addAttribute("isFollow", false);
+            }
+
             List<Question> questions = this.userService.getAllQuestionFromUser(user.getUsername());
             model.addAttribute("questions", questions);
             return "user-profile";

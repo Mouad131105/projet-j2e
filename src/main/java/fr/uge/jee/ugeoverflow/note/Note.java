@@ -1,6 +1,5 @@
 package fr.uge.jee.ugeoverflow.note;
 
-import fr.uge.jee.ugeoverflow.user.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,8 +19,7 @@ public class Note {
     private String receiverUsername;
 
     @NotNull
-    @ManyToOne
-    private User author;
+    private String authorUsername;
 
     @NotNull
     @Positive
