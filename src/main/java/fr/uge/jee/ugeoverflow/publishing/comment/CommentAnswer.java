@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "CommentAnswer")
 public class CommentAnswer {
     @GeneratedValue
     @Id
@@ -33,7 +32,6 @@ public class CommentAnswer {
     @Size(max = 255)
     private String content;
 
-    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime date = LocalDateTime.now();
 }

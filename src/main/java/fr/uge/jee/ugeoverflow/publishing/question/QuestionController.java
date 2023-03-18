@@ -1,10 +1,13 @@
 package fr.uge.jee.ugeoverflow.publishing.question;
 
 import fr.uge.jee.ugeoverflow.publishing.Tag;
+import fr.uge.jee.ugeoverflow.publishing.answer.Answer;
 import fr.uge.jee.ugeoverflow.publishing.comment.CommentQuestion;
+import fr.uge.jee.ugeoverflow.service.AnswerService;
 import fr.uge.jee.ugeoverflow.user.User;
 import fr.uge.jee.ugeoverflow.publishing.comment.CommentQuestionService;
 import fr.uge.jee.ugeoverflow.user.UserService;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/question")
@@ -24,42 +29,33 @@ public class QuestionController {
     private final QuestionService questionService;
     private final UserService userService;
     private final CommentQuestionService commentQuestionService;
+    private final AnswerService answerService;
 
     public QuestionController(QuestionService questionService, UserService userService,
-                              CommentQuestionService commentQuestionService) {
+                              CommentQuestionService commentQuestionService, AnswerService answerService) {
         this.questionService = questionService;
         this.userService = userService;
         this.commentQuestionService = commentQuestionService;
-    }
-
-
-    @PostMapping("/comment/question")
-    public String processForm(@ModelAttribute(name="commentQuestion") @Valid CommentQuestion commentQuestion,
-                              BindingResult bindingResult,
-                              Model model) {
-
-        CommentQuestion newCommentQuestion = this.commentQuestionService.save(commentQuestion);
-        Question question = newCommentQuestion.getParentQuestion();
-        List<CommentQuestion> commentQuestions = this.commentQuestionService.findAllByParentQuestionId(question.getId());
-        model.addAttribute("question", question);
-        model.addAttribute("commentsQuestion", commentQuestions);
-        model.addAttribute("loggedUser", newCommentQuestion.getAuthor());
-
-        return "question-profile";
+        this.answerService = answerService;
     }
 
     @GetMapping("/profile/{id}")
     public String getProfile(@PathVariable("id") String id,
                              @RequestParam(name = "loggedUser") String loggedUser,
                              CommentQuestion commentQuestion,
+
+                             Answer answer,
                              Model model) {
 
         Question question = this.questionService.findQuestionById(Long.valueOf(id));
         List<CommentQuestion> commentQuestions = this.commentQuestionService.findAllByParentQuestionId(question.getId());
+        List<Answer> answers = this.answerService.findAllByParentQuestionId(question.getId());
+        answers = answers.stream().sorted((a1, a2) -> Long.compare(a2.getScore(), a1.getScore())).collect(Collectors.toList());
 
         model.addAttribute("question", question);
         model.addAttribute("commentsQuestion", commentQuestions);
         model.addAttribute("loggedUser", loggedUser);
+        model.addAttribute("answers", answers);
 
         return "question-profile";
     }
@@ -90,11 +86,11 @@ public class QuestionController {
             return "question-form";
         }
 
+        question.setAnswers(Collections.emptyList());
+        question.setComments(Collections.emptyList());
         Question createdQuestion = this.questionService.save(question);
-        model.addAttribute("createdQuestion", createdQuestion);
-        model.addAttribute("commentsQuestion", this.commentQuestionService.findAllByParentQuestionId(createdQuestion.getId()));
-        model.addAttribute("loggedUser", loggedUser);
-        return "question-profile";
+
+        return "redirect:/question/profile/" + createdQuestion.getId() + "?loggedUser=" + loggedUser;
     }
 
     @GetMapping("/questions")
