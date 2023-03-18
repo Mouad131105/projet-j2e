@@ -97,7 +97,7 @@ public class QuestionController {
         return "question-profile";
     }
 
-    @GetMapping("/questions")
+    /*@GetMapping("/questions")
     public String questions(Model model,
                             @RequestParam(name = "page", defaultValue = "0") int page,
                             @RequestParam(name = "loggedUser") String loggedUser) {
@@ -108,6 +108,32 @@ public class QuestionController {
         User user = this.userService.findUserByUsername(loggedUser);
         model.addAttribute("loggedUser", user);
         Page<Question> questions = questionService.findAll(page, 5);
+        model.addAttribute("listQuestions", questions.getContent());
+        model.addAttribute("pages", new int[questions.getTotalPages()]);
+        model.addAttribute("currentPage", page);
+        return "home-page-questions";
+    }*/
+    @GetMapping("/questions")
+    public String questions(Model model,
+                            @RequestParam(name = "page", defaultValue = "0") int page,
+                            @RequestParam(name = "loggedUser") String loggedUser) {
+        List<User> users = this.userService.getAllUsers();
+        if(!users.isEmpty()){
+            model.addAttribute("allUsers",users);
+        }
+        User user = this.userService.findUserByUsername(loggedUser);
+        model.addAttribute("loggedUser", user);
+
+        List<Question> sortedQuestions = questionService.getSortedQuestionsByFollowing(user);
+        List<Question> otherQuestions = (List<Question>) questionService.findAll(0, 5);
+
+        // Supprimez les questions déjà triées de la liste des autres questions
+        otherQuestions.removeAll(sortedQuestions);
+
+        // Ajoutez les autres questions après les questions triées
+        sortedQuestions.addAll(otherQuestions);
+
+        Page<Question> questions = new PageImpl<>(sortedQuestions, PageRequest.of(page, 5), sortedQuestions.size());
         model.addAttribute("listQuestions", questions.getContent());
         model.addAttribute("pages", new int[questions.getTotalPages()]);
         model.addAttribute("currentPage", page);
