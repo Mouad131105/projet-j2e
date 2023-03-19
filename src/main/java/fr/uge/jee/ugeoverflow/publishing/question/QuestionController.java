@@ -235,10 +235,8 @@ public class QuestionController {
                               @RequestParam(name = "selectedTags") String selectedTags,
                               @RequestParam(name = "page", defaultValue = "0") int page,
                               @RequestParam(name = "loggedUser") String loggedUser) {
-        List<User> users = this.userService.getAllUsers();
-        if (!users.isEmpty()) {
-            model.addAttribute("allUsers", users);
-        }
+
+        addUsersToModel(model);
         User user = this.userService.findUserByUsername(loggedUser);
         model.addAttribute("loggedUser", user);
 
@@ -246,20 +244,22 @@ public class QuestionController {
         List<String> tagsList = Arrays.asList(tagsArray);
         List<Question> allQuestions = new ArrayList<>();
         for (String tag : tagsList) {
-            List<Question> sortedQuestions = questionService.getSortedQuestionsByFollowing(user, tag);
-            List<Question> otherQuestions = (List<Question>) questionService.findByTag(tag, PageRequest.of(0, 5));
+            List<Question> sortedQuestions = questionService.getSortedQuestionsByFollowing(user);
+            List<Question> otherQuestions = new ArrayList<>(questionService.findByTag(tag));
 
-            // Supprimez les questions déjà triées de la liste des autres questions
             otherQuestions.removeAll(sortedQuestions);
-
-            // Ajoutez les autres questions après les questions triées
             sortedQuestions.addAll(otherQuestions);
             allQuestions.addAll(sortedQuestions);
         }
-        Page<Question> questions = new PageImpl<>(allQuestions, PageRequest.of(page, 5), allQuestions.size());
+
+        Page<Question> questions = paginate(allQuestions, page, pageSize);
+
         model.addAttribute("listQuestions", questions.getContent());
+        model.addAttribute("selectedTags",selectedTags);
         model.addAttribute("pages", new int[questions.getTotalPages()]);
         model.addAttribute("currentPage", page);
+        model.addAttribute("isTag", true);
+        model.addAttribute("isSearch", false);
         return "home-page-questions";
     }
 
