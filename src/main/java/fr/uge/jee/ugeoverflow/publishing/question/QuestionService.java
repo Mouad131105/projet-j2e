@@ -25,10 +25,15 @@ public class QuestionService {
     public Page<Question> findAll(int page, int size){
         return questionRepository.findAll(PageRequest.of(page, size));
     }
+    public  List<Question> findAll(){return  questionRepository.findAll();}
     public Page<Question> findByTopicContains(String keyword, PageRequest of){
         return questionRepository.findByTopicContains(keyword,of);
     }
+    public List<Question> findByTopicContains(String keyword){
+        return questionRepository.findByTopicContains(keyword);
+    }
     public Page<Question> findByTag(String tag, PageRequest of){ return questionRepository.findByTagsContaining(Set.of(Tag.valueOf(tag)),of);}
+    public List<Question> findByTag(String tag){ return questionRepository.findByTagsContaining(Set.of(Tag.valueOf(tag)));}
 
     public List<Question> getQuestionsByUser(User user) {
         return questionRepository.findByAuthor(user);
@@ -50,37 +55,6 @@ public class QuestionService {
     }
     public List<Question> getQuestionsByUser(User user, String keyword) {
         return questionRepository.findByAuthorAndTopicContains(user, keyword);
-    }
-    public List<Question> getSortedQuestionsByFollowing(User loggedUser, String keyword) {
-        List<User> following = new ArrayList<>(loggedUser.getFollowedUsers());
-        List<Question> sortedQuestions = new ArrayList<>();
-
-        for (User user : following) {
-            sortedQuestions.addAll(getQuestionsByUser(user, keyword));
-        }
-        for (User user : following) {
-            for (User followedUser : user.getFollowedUsers()) {
-                sortedQuestions.addAll(getQuestionsByUser(followedUser, keyword));
-            }
-        }
-        return sortedQuestions;
-    }
-    public List<Question> getQuestionsByUser(User user, Tag tag) {
-        return questionRepository.findByAuthorAndTagsContaining(user, Set.of(tag));
-    }
-    public List<Question> getSortedQuestionsByFollowing(User loggedUser, Tag tag) {
-        List<User> following = new ArrayList<>(loggedUser.getFollowedUsers());
-        List<Question> sortedQuestions = new ArrayList<>();
-
-        for (User user : following) {
-            sortedQuestions.addAll(getQuestionsByUser(user, tag));
-        }
-        for (User user : following) {
-            for (User followedUser : user.getFollowedUsers()) {
-                sortedQuestions.addAll(getQuestionsByUser(followedUser, tag));
-            }
-        }
-        return sortedQuestions;
     }
 
     public Question findQuestionById(Long id) {
