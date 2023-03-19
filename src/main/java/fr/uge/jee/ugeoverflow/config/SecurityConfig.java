@@ -1,14 +1,17 @@
 package fr.uge.jee.ugeoverflow.config;
 
 import fr.uge.jee.ugeoverflow.security.CustomAuthenticationProvider;
-import fr.uge.jee.ugeoverflow.user.Role;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
@@ -35,7 +38,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //.loginProcessingUrl("/authentication/login")
                 //.defaultSuccessUrl("/authentication/profile", true)
                 .csrf().and().cors().disable()
-                .authorizeRequests().anyRequest().authenticated()
+                .authorizeRequests()
+                .mvcMatchers("/authentication/**").permitAll()
+                .and()
+                .authorizeRequests()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/authentication/login")
@@ -51,10 +58,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/authentication/login");
     }
 
-
+    /**
+     * Override this method to configure {@link WebSecurity}. For example, if you wish to
+     * ignore certain requests.
+     *
+     * @param web
+     */
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        // For boostrap layout
+        web.ignoring().mvcMatchers("/webjars/**");
+    }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

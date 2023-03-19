@@ -1,30 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link th:href="@{message.css}" rel="stylesheet" />
-    </head>
-    <form th:action="@{/authentication/login}" method="post">
-        <h2>Sign in</h2>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="/webjars/bootstrap/5.1.2/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="h-100 d-flex align-items-center justify-content-center">
+    <div class="content">
+        <form th:action="@{/authentication/login}" method="post">
+            <h3>Sign in</h3>
+            <hr />
+            <div th:class="error" th:if="${loginError != null}">
+                <small class="text-danger" th:text="${loginError}"/>
+            </div>
+            <div class="form-group">
+                <label for="username">Username :</label>
+                <input class="form-control" id="username" type="text" name="username" placeholder="Username or email">
+            </div>
 
-        <div th:class="error" th:if="${loginError != null}" th:text="${loginError}"/>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input class="form-control" id="password" type="password" name="password" placeholder="Password">
+            </div>
+            <hr />
+            <div>
+                <button class="btn btn-primary" type="submit">Login</button>
+            </div>
+        </form>
 
-        <div>
-            <label for="username">Username :</label>
-            <input id="username" type="text" name="username">
-        </div>
-
-        <div>
-            <label for="password">Password :</label>
-            <input id="password" type="password" name="password">
-        </div>
-
-        <div>
-            <button type="submit">Login</button>
-        </div>
-
-        <a th:href="@{/users/register}">Sign up</a>
-
-    </form>
-
+        <hr />
+        <a th:href="@{/authentication/register}">Sign up</a>
+    </div>
+</div>
+</body>
 </html>

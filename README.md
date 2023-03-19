@@ -27,7 +27,7 @@ A partir de la fenêtre `Database` de votre interface `IntelliJ`, sélectionnez 
 
 Configurer le fichier démarrage `src/main/java/fr/uge/jee/ugeoverflow/Application.java` dans l'interface `Edit configuration` de `IntelliJ`.
 
-Lorsque l'application est démarré, vous pouvez accéder à l'interface de `Swagger UI` en allant sur [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html). 
+Lorsque l'application est démarré, vous pouvez accéder à l'interface de `Swagger UI` en allant sur [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui/index.html). 
 Cette interface est utile pour tester vos **API REST** et les documenter.
 
 <h3>Documentation</h3>

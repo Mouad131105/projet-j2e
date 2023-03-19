@@ -1,6 +1,5 @@
 package fr.uge.jee.ugeoverflow.security;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,7 +14,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private CustomUserDetailsService customUserDetailsService;
     private PasswordEncoder passwordEncoder;
 
-    public CustomAuthenticationProvider(CustomUserDetailsService customUserDetailsService,@Lazy PasswordEncoder passwordEncoder) {
+    public CustomAuthenticationProvider(CustomUserDetailsService customUserDetailsService, PasswordEncoder passwordEncoder) {
         this.customUserDetailsService = customUserDetailsService;
         this.passwordEncoder = passwordEncoder;
     }

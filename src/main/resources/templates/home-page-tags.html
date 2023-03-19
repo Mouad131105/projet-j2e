@@ -8,7 +8,10 @@
 <div>
     <h1>UGEOverflow</h1>
     <h3><small class="text-muted" th:text="${'Welcome to your home page ' + loggedUser.getUsername()}"></small></h3>
-    <a th:href="@{/authentication/logout}">Logout</a>
+    <ul>
+        <li><a th:href="@{/authentication/logout}">Logout</a></li>
+        <li><a th:href="@{/authentication/settings}">User settings</a></li>
+    </ul>
 </div>
 
 <div>

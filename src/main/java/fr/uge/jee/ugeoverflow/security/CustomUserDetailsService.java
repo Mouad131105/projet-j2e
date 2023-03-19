@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
-    private static final String EMAIL_REGEX = "^\\S+@\\S+\\.w+";
+    private static final String EMAIL_REGEX = "^\\S+@\\S+\\.\\S+";
     private UserRepository userRepository;
 
     public CustomUserDetailsService(UserRepository userRepository) {

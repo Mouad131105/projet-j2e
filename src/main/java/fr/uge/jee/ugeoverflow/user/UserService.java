@@ -1,10 +1,8 @@
 package fr.uge.jee.ugeoverflow.user;
 
 import fr.uge.jee.ugeoverflow.note.Note;
-import fr.uge.jee.ugeoverflow.publishing.question.Question;
 import fr.uge.jee.ugeoverflow.note.NoteRepository;
-import lombok.var;
-import org.hibernate.Hibernate;
+import fr.uge.jee.ugeoverflow.publishing.question.Question;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -36,7 +34,7 @@ public class UserService {
         return this.userRepository.findAll();
     }
 
-    public boolean existsUsername(String username) {
+    public boolean isUsernameAlreadyUse(String username) {
         return this.userRepository.existsByUsername(username);
     }
 
@@ -73,6 +71,13 @@ public class UserService {
         return this.noteRepository.findNoteFromReceiverAndAuthor(receiver, author);
     }
 
+    public boolean isEmailAlreadyUse(String email) {
+        return this.userRepository.existsByEmail(email);
+    }
+
+    public User findUserWithEmail(String email) {
+        return this.userRepository.findByEmail(email);
+    }
 
     @PostConstruct
     private void postConstruct() {
