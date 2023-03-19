@@ -244,15 +244,17 @@ public class QuestionController {
         List<String> tagsList = Arrays.asList(tagsArray);
         List<Question> allQuestions = new ArrayList<>();
         for (String tag : tagsList) {
-            List<Question> sortedQuestions = questionService.getSortedQuestionsByFollowing(user);
-            List<Question> otherQuestions = new ArrayList<>(questionService.findByTag(tag));
-
-            otherQuestions.removeAll(sortedQuestions);
-            sortedQuestions.addAll(otherQuestions);
-            allQuestions.addAll(sortedQuestions);
+            List<Question> questions = new ArrayList<>(questionService.findByTag(tag));
+            allQuestions.addAll(questions);
         }
+        List<Question> allSortedQuestions = questionService.getSortedQuestionsByFollowing(user);
+        List<Question> otherQuestions = new ArrayList<>(questionService.findAll());
+        otherQuestions.removeAll(allSortedQuestions);
+        allSortedQuestions.addAll(otherQuestions);
 
-        Page<Question> questions = paginate(allQuestions, page, pageSize);
+        List<Question> commonQuestions = new ArrayList<>(allSortedQuestions);
+        commonQuestions.retainAll(allQuestions);
+        Page<Question> questions = paginate(commonQuestions, page, pageSize);
 
         model.addAttribute("listQuestions", questions.getContent());
         model.addAttribute("selectedTags",selectedTags);
