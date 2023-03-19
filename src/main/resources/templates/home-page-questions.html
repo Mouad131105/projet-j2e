@@ -65,10 +65,23 @@
         </div>
         <ul class="nav nav-pills">
             <li th:each="page,status:${pages}">
-                <a th:class="${status.index==currentPage?'btn btn-primary ms-1':'btn btn-outline-primary ms-1'}"
-                   th:text="${status.index}"
-                   th:href="@{/question/questions(page=${status.index},loggedUser=${loggedUser.username})}"
-                ></a>
+                <form th:if="${!isTag and !isSearch}" th:action="@{/question/questions}" method="get">
+                    <input type="hidden" name="page" th:value="${status.index}">
+                    <input type="hidden" name="loggedUser" th:value="${loggedUser.username}">
+                    <button type="submit" th:class="${status.index==currentPage?'btn btn-primary ms-1':'btn btn-outline-primary ms-1'}" th:text="${status.index}"></button>
+                </form>
+                <form th:if="${isTag}" th:action="@{/question/tag}" method="get">
+                    <input type="hidden" name="selectedTags" th:value="${selectedTags}">
+                    <input type="hidden" name="page" th:value="${status.index}">
+                    <input type="hidden" name="loggedUser" th:value="${loggedUser.username}">
+                    <button type="submit" th:class="${status.index==currentPage?'btn btn-primary ms-1':'btn btn-outline-primary ms-1'}" th:text="${status.index}"></button>
+                </form>
+                <form th:if="${isSearch}" th:action="@{/question/search}" method="get">
+                    <input type="hidden" name="page" th:value="${status.index}">
+                    <input type="hidden" name="loggedUser" th:value="${loggedUser.username}">
+                    <input type="hidden" name="keyword" th:value="${keyword}">
+                    <button type="submit" th:class="${status.index==currentPage?'btn btn-primary ms-1':'btn btn-outline-primary ms-1'}" th:text="${status.index}"></button>
+                </form>
             </li>
         </ul>
     </div>

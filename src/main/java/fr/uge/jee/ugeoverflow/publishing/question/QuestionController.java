@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/question")
@@ -30,6 +31,7 @@ public class QuestionController {
     private final UserService userService;
     private final CommentQuestionService commentQuestionService;
     private final AnswerService answerService;
+    private final int pageSize = 5;
 
     public QuestionController(QuestionService questionService, UserService userService,
                               CommentQuestionService commentQuestionService, AnswerService answerService) {
@@ -37,6 +39,36 @@ public class QuestionController {
         this.userService = userService;
         this.commentQuestionService = commentQuestionService;
         this.answerService = answerService;
+    }
+    private Page<Question> paginate(List<Question> allQuestions, int page, int pageSize) {
+        List<List<Question>> pages = IntStream.range(0, (allQuestions.size() + pageSize - 1) / pageSize)
+                .mapToObj(i -> allQuestions.subList(i * pageSize, Math.min((i + 1) * pageSize, allQuestions.size())))
+                .collect(Collectors.toList());
+
+        List<Question> requestedPage = pages.get(page);
+        return new PageImpl<>(requestedPage, PageRequest.of(page, pageSize), allQuestions.size());
+    }
+
+    private void addUsersToModel(Model model) {
+        List<User> users = userService.getAllUsers();
+        if (!users.isEmpty()) {
+            model.addAttribute("allUsers", users);
+        }
+    }
+
+    @PostMapping("/comment/question")
+    public String processForm(@ModelAttribute(name = "commentQuestion") @Valid CommentQuestion commentQuestion,
+                              BindingResult bindingResult,
+                              Model model) {
+
+        CommentQuestion newCommentQuestion = this.commentQuestionService.save(commentQuestion);
+        Question question = newCommentQuestion.getParentQuestion();
+        List<CommentQuestion> commentQuestions = this.commentQuestionService.findAllByParentQuestionId(question.getId());
+        model.addAttribute("question", question);
+        model.addAttribute("commentsQuestion", commentQuestions);
+        model.addAttribute("loggedUser", newCommentQuestion.getAuthor());
+
+        return "question-profile";
     }
 
     @GetMapping("/profile/{id}")
@@ -65,7 +97,7 @@ public class QuestionController {
         model.addAttribute("allTags", Arrays.asList(Tag.values()));
 
         User loggedUser = this.userService.findUserByUsername(username);
-        if (loggedUser != null ) {
+        if (loggedUser != null) {
             model.addAttribute("loggedUser", loggedUser);
             question.setAuthor(loggedUser);
             return "question-form";
@@ -75,7 +107,7 @@ public class QuestionController {
     }
 
     @PostMapping("/create")
-    public String processForm(@ModelAttribute(name="question") @Valid Question question,
+    public String processForm(@ModelAttribute(name = "question") @Valid Question question,
                               @RequestParam(name = "loggedUser") String loggedUser,
                               CommentQuestion commentQuestion,
                               BindingResult bindingResult,
@@ -93,13 +125,13 @@ public class QuestionController {
         return "redirect:/question/profile/" + createdQuestion.getId() + "?loggedUser=" + loggedUser;
     }
 
-    @GetMapping("/questions")
+    /*@GetMapping("/questions")
     public String questions(Model model,
                             @RequestParam(name = "page", defaultValue = "0") int page,
                             @RequestParam(name = "loggedUser") String loggedUser) {
         List<User> users = this.userService.getAllUsers();
-        if(!users.isEmpty()){
-            model.addAttribute("allUsers",users);
+        if (!users.isEmpty()) {
+            model.addAttribute("allUsers", users);
         }
         User user = this.userService.findUserByUsername(loggedUser);
         model.addAttribute("loggedUser", user);
@@ -108,9 +140,34 @@ public class QuestionController {
         model.addAttribute("pages", new int[questions.getTotalPages()]);
         model.addAttribute("currentPage", page);
         return "home-page-questions";
+    }*/
+    @GetMapping("/questions")
+    public String questions(Model model,
+                            @RequestParam(name = "page", defaultValue = "0") int page,
+                            @RequestParam(name = "loggedUser") String loggedUser) {
+
+        addUsersToModel(model);
+
+        User user = this.userService.findUserByUsername(loggedUser);
+        model.addAttribute("loggedUser", user);
+
+
+        List<Question> sortedQuestions = questionService.getSortedQuestionsByFollowing(user);
+        List<Question> otherQuestions = new ArrayList<>(questionService.findAll());
+
+        otherQuestions.removeAll(sortedQuestions);
+        sortedQuestions.addAll(otherQuestions);
+
+        Page<Question> questions = paginate(sortedQuestions, page, pageSize);
+        model.addAttribute("listQuestions", questions.getContent());
+        model.addAttribute("pages", new int[questions.getTotalPages()]);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("isTag", false);
+        model.addAttribute("isSearch", false);
+        return "home-page-questions";
     }
 
-    @PostMapping("/search")
+    /*@PostMapping("/search")
     public String searchQuestion(Model model,
                                  @RequestParam(name = "page", defaultValue = "0") int page,
                                  @RequestParam(name = "keyword", defaultValue = "") String keyword,
@@ -125,10 +182,41 @@ public class QuestionController {
         model.addAttribute("listQuestions", questions.getContent());
         model.addAttribute("pages", new int[questions.getTotalPages()]);
         model.addAttribute("currentPage", page);
+        model.addAttribute("isTag", false);
+        model.addAttribute("isSearch", false);
+        return "home-page-questions";
+    }*/
+    @RequestMapping(value = "/search", method = {RequestMethod.GET, RequestMethod.POST})
+    public String searchQuestion(Model model,
+                                 @RequestParam(name = "page", defaultValue = "0") int page,
+                                 @RequestParam(name = "keyword", defaultValue = "") String keyword,
+                                 @RequestParam(name = "loggedUser") String loggedUser) {
+        addUsersToModel(model);
+        User user = this.userService.findUserByUsername(loggedUser);
+        model.addAttribute("loggedUser", user);
+
+        List<Question> allSortedQuestions = questionService.getSortedQuestionsByFollowing(user);
+        List<Question> otherQuestions = new ArrayList<>(questionService.findAll());
+        otherQuestions.removeAll(allSortedQuestions);
+        allSortedQuestions.addAll(otherQuestions);
+
+        List<Question> questionsContainsKeyword = questionService.findByTopicContains(keyword);
+
+        List<Question> commonQuestions = new ArrayList<>(allSortedQuestions);
+        commonQuestions.retainAll(questionsContainsKeyword);
+
+        Page<Question> questions = paginate(commonQuestions, page, pageSize);
+
+        model.addAttribute("listQuestions", questions.getContent());
+        model.addAttribute("pages", new int[questions.getTotalPages()]);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("isTag", false);
+        model.addAttribute("isSearch", true);
+        model.addAttribute("keyword", keyword);
         return "home-page-questions";
     }
-    
-    @GetMapping("/tag")
+
+    /*@GetMapping("/tag")
     public String processTags(Model model,
                               @RequestParam(name = "selectedTags") String selectedTags,
                               @RequestParam(name = "page", defaultValue = "0") int page,
@@ -152,5 +240,40 @@ public class QuestionController {
         model.addAttribute("pages", new int[questions.getTotalPages()]);
         model.addAttribute("currentPage", page);
         return "home-page-questions";
+    }*/
+    @GetMapping("/tag")
+    public String processTags(Model model,
+                              @RequestParam(name = "selectedTags") String selectedTags,
+                              @RequestParam(name = "page", defaultValue = "0") int page,
+                              @RequestParam(name = "loggedUser") String loggedUser) {
+
+        addUsersToModel(model);
+        User user = this.userService.findUserByUsername(loggedUser);
+        model.addAttribute("loggedUser", user);
+
+        String[] tagsArray = selectedTags.split(",");
+        List<String> tagsList = Arrays.asList(tagsArray);
+        List<Question> allQuestions = new ArrayList<>();
+        for (String tag : tagsList) {
+            List<Question> questions = new ArrayList<>(questionService.findByTag(tag));
+            allQuestions.addAll(questions);
+        }
+        List<Question> allSortedQuestions = questionService.getSortedQuestionsByFollowing(user);
+        List<Question> otherQuestions = new ArrayList<>(questionService.findAll());
+        otherQuestions.removeAll(allSortedQuestions);
+        allSortedQuestions.addAll(otherQuestions);
+
+        List<Question> commonQuestions = new ArrayList<>(allSortedQuestions);
+        commonQuestions.retainAll(allQuestions);
+        Page<Question> questions = paginate(commonQuestions, page, pageSize);
+
+        model.addAttribute("listQuestions", questions.getContent());
+        model.addAttribute("selectedTags",selectedTags);
+        model.addAttribute("pages", new int[questions.getTotalPages()]);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("isTag", true);
+        model.addAttribute("isSearch", false);
+        return "home-page-questions";
     }
+
 }

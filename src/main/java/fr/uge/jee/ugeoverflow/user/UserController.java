@@ -6,14 +6,20 @@ import fr.uge.jee.ugeoverflow.note.NoteService;
 import fr.uge.jee.ugeoverflow.publishing.question.Question;
 import fr.uge.jee.ugeoverflow.publishing.question.QuestionService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/users")
@@ -125,11 +131,12 @@ public class UserController {
         return "user-registration";
     }
 
-    /*@GetMapping("/login")
+    @GetMapping("/login")
     public String loginForm() {
         return "login-form";
     }
 
+    /*
     @PostMapping("/login")
     public String processLogin(@RequestParam(name = "username") @NotEmpty String username,
                               @RequestParam(name = "password") @NotEmpty String password,
@@ -150,16 +157,72 @@ public class UserController {
         return "login-form";
     }*/
 
+    @PostMapping("/login")
+    public String processLogin(@RequestParam(name = "username") @NotEmpty String username,
+                               @RequestParam(name = "password") @NotEmpty String password,
+                               Model model) {
+
+        List<User> users = this.userService.getAllUsers();
+        if(!users.isEmpty()){
+            model.addAttribute("allUsers",users);
+        }
+
+        User user = this.userService.findUserByUsername(username);
+        if (user != null && user.getPassword().equals(password)) {
+            model.addAttribute("loggedUser", user);
+
+            List<Question> sortedQuestions = questionService.getSortedQuestionsByFollowing(user);
+            List<Question> otherQuestions = new ArrayList<>(questionService.findAll());
+
+            // Supprimez les questions déjà triées de la liste des autres questions
+            otherQuestions.removeAll(sortedQuestions);
+
+            // Ajoutez les autres questions après les questions triées
+            sortedQuestions.addAll(otherQuestions);
+
+            Page<Question> questions = new PageImpl<>(sortedQuestions, PageRequest.of(0, 5), sortedQuestions.size());
+            model.addAttribute("listQuestions", questions.getContent());
+            model.addAttribute("pages", new int[questions.getTotalPages()]);
+            model.addAttribute("currentPage", 0);
+            return "home-page";
+        }
+
+        model.addAttribute("loginError", "Username or password is incorrect");
+
+        return "login-form";
+    }
     @RequestMapping(value = "/homepage/questions", method = {RequestMethod.POST, RequestMethod.GET})
     public String homepageQuestions(Model model){
+
         User user = this.authenticationService.getLoggedUser();
         model.addAttribute("loggedUser", user);
-        Page<Question> questions = questionService.findAll(0, 5);
+        List<User> users = this.userService.getAllUsers();
+        if(!users.isEmpty()){
+            model.addAttribute("allUsers",users);
+        }
+        List<Question> sortedQuestions = questionService.getSortedQuestionsByFollowing(user);
+        List<Question> otherQuestions = new ArrayList<>(questionService.findAll());
+
+        otherQuestions.removeAll(sortedQuestions);
+
+        sortedQuestions.addAll(otherQuestions);
+
+        int pageSize = 5;
+        List<List<Question>> pages = IntStream.range(0, (sortedQuestions.size() + pageSize - 1) / pageSize)
+                .mapToObj(i -> sortedQuestions.subList(i * pageSize, Math.min((i + 1) * pageSize, sortedQuestions.size())))
+                .collect(Collectors.toList());
+
+        List<Question> firstPage = pages.get(0);
+        Page<Question> questions = new PageImpl<>(firstPage, PageRequest.of(0, pageSize), sortedQuestions.size());
+
         model.addAttribute("listQuestions", questions.getContent());
         model.addAttribute("pages", new int[questions.getTotalPages()]);
         model.addAttribute("currentPage", 0);
+        model.addAttribute("isTag", false);
+        model.addAttribute("isSearch", false);
         return "home-page-questions";
     }
+
 
     @PostMapping("/homepage/users")
     public String homepageUsers(@RequestParam(name = "loggedUser") String loggedUser,
