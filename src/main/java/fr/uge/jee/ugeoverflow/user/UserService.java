@@ -55,6 +55,18 @@ public class UserService {
         return this.userRepository.findAllFollowedUsersFromUser(username);
     }
 
+    public boolean isEmailAlreadyUse(String email) {
+        return this.userRepository.existsByEmail(email);
+    }
+
+    public boolean isUsernameAlreadyUse(String username) {
+        return this.userRepository.existsByUsername(username);
+    }
+
+    public User findUserWithEmail(String email) {
+        return this.userRepository.findByEmail(email);
+    }
+
     /*@Transactional
     public Set<User> findAllFollowedUsersFromUser(String username){
         Set<User> test = this.userRepository.findAllFollowedUsersFromUser(username);
