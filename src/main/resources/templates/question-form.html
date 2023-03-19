@@ -8,8 +8,6 @@
 
 <form th:action="@{/question/create}" th:object="${question}" method="post">
 
-    <input type="hidden" th:name="loggedUser" th:value="${loggedUser.username}"/>
-
     <div th:class="error" th:if="${selectedUserError != null}" th:text="${selectedUserError}"/>
 
     <div th:if="${#fields.hasAnyErrors()}">

@@ -19,12 +19,10 @@
     <div class="container-fluid bg-light">
         <div class="d-flex justify-content-center">
             <form th:action="@{/users/homepage/questions}" method="post">
-                <input type="hidden" name="loggedUser" th:value="${loggedUser.username}">
                 <button type="submit" class="btn btn-info me-2" id="button1">Questions</button>
             </form>
             <button class="btn btn-info me-2" id="button2">Users</button>
             <form th:action="@{/users/homepage/tags}" method="post">
-                <input type="hidden" name="loggedUser" th:value="${loggedUser.username}">
                 <button type="submit" class="btn btn-info" id="button3">Tags</button>
             </form>
         </div>
@@ -39,7 +37,7 @@
                         <div class="card-body">
                             <h5 class="card-title" th:text="${user.username}"></h5>
                             <p class="card-text"><strong>Role:</strong> <span th:text="${user.role}"></span></p>
-                            <a th:href="@{/users/profile/{username}(username=${user.username},loggedUser=${loggedUser.username})}"
+                            <a th:href="@{/users/profile/{username}(username=${user.username})}"
                                class="stretched-link">See</a>
                         </div>
                     </div>

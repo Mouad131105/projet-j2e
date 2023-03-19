@@ -43,7 +43,7 @@
 
 
     <div>
-        <form th:action="@{/registration/follow}" method="post" id="followForm">
+        <form th:action="@{/users/follow}" method="post" id="followForm">
             <input type="hidden"  name="userFollow" th:value="${user.username}">
             <input type="hidden"  name="loggedUser" th:value="${loggedUser.username}">
             <button type="submit" th:text="${isFollow == true} ? 'UNFOLLOW' : 'FOLLOW'" th:disabled="${user.username == loggedUser.username}"></button>
@@ -51,9 +51,18 @@
     </div>
 
 
-    <div th:disabled="${isFollow == false}">
-        <a th:href="@{/users/homepage/questions}">Homepage</a>
-
+    <div th:if="${isFollow}">
+        <form th:action="@{/users/note}" method="post">
+            <select name="selectedNote">
+                <option th:each="i : ${#numbers.sequence(1, 5)}"
+                        th:value="${i}"
+                        th:text="${note != null and note == i} ? ${note} : ${i}"
+                        th:selected="${note != null and note == i}">
+                </option>
+            </select>
+            <input type="hidden" name="userFollow" th:value="${user.username}"/>
+            <button type="submit">Submit</button>
+        </form>
     </div>
 
 

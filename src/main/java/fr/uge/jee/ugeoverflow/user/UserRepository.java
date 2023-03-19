@@ -18,7 +18,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
     List<User> findAll();
     boolean existsByEmail(String email);
 
-    @Query(value = "SELECT u.followedUsers FROM User u WHERE u.username = :username")
+    @Query("SELECT u.followedUsers FROM User u WHERE u.username = :username")
     Set<User> findAllFollowedUsersFromUser(@Param("username") String username);
 
     @Query(value = "SELECT q FROM Question q WHERE q.author.username = :username")

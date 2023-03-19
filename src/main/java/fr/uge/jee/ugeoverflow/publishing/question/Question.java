@@ -1,5 +1,7 @@
 package fr.uge.jee.ugeoverflow.publishing.question;
 
+import fr.uge.jee.ugeoverflow.publishing.answer.Answer;
+import fr.uge.jee.ugeoverflow.publishing.comment.CommentQuestion;
 import fr.uge.jee.ugeoverflow.user.User;
 import fr.uge.jee.ugeoverflow.publishing.Tag;
 import lombok.Data;
@@ -10,6 +12,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -30,7 +34,7 @@ public class Question {
     @Size(max = 255)
     private String topic;
 
-    @NotBlank(message = "Topic cannot be empty.")
+    @NotBlank(message = "Content cannot be empty.")
     @Size(max = 255)
     private String content;
 
@@ -40,6 +44,23 @@ public class Question {
     @NotEmpty(message = "The question must contain at least one tag.")
     private Set<Tag> tags;
 
-    private int comments;
-    private int answers;
+    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<CommentQuestion> comments;
+
+    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Answer> answers;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Question question = (Question) o;
+        return id == question.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
 }

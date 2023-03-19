@@ -1,5 +1,6 @@
 package fr.uge.jee.ugeoverflow.user;
 
+import fr.uge.jee.ugeoverflow.note.Note;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -43,8 +44,8 @@ public class User {
     )
     private Set<User> followedUsers;
 
-    /*@OneToMany(orphanRemoval = true)
-    private Set<Note> confidenceScore;*/
+    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<Note> confidenceScore;
 
     public User(String username, String password, String email, Role role, Set<User> followedUsers) {
         this.username = username;
