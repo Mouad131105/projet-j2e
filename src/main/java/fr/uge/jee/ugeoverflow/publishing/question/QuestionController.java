@@ -17,6 +17,8 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/question")
@@ -24,6 +26,7 @@ public class QuestionController {
     private final QuestionService questionService;
     private final UserService userService;
     private final CommentQuestionService commentQuestionService;
+    private final int pageSize = 5;
 
     public QuestionController(QuestionService questionService, UserService userService,
                               CommentQuestionService commentQuestionService) {
@@ -31,7 +34,21 @@ public class QuestionController {
         this.userService = userService;
         this.commentQuestionService = commentQuestionService;
     }
+    private Page<Question> paginate(List<Question> allQuestions, int page, int pageSize) {
+        List<List<Question>> pages = IntStream.range(0, (allQuestions.size() + pageSize - 1) / pageSize)
+                .mapToObj(i -> allQuestions.subList(i * pageSize, Math.min((i + 1) * pageSize, allQuestions.size())))
+                .collect(Collectors.toList());
 
+        List<Question> requestedPage = pages.get(page);
+        return new PageImpl<>(requestedPage, PageRequest.of(page, pageSize), allQuestions.size());
+    }
+
+    private void addUsersToModel(Model model) {
+        List<User> users = userService.getAllUsers();
+        if (!users.isEmpty()) {
+            model.addAttribute("allUsers", users);
+        }
+    }
 
     @PostMapping("/comment/question")
     public String processForm(@ModelAttribute(name = "commentQuestion") @Valid CommentQuestion commentQuestion,
@@ -117,26 +134,25 @@ public class QuestionController {
     public String questions(Model model,
                             @RequestParam(name = "page", defaultValue = "0") int page,
                             @RequestParam(name = "loggedUser") String loggedUser) {
-        List<User> users = this.userService.getAllUsers();
-        if(!users.isEmpty()){
-            model.addAttribute("allUsers",users);
-        }
+
+        addUsersToModel(model);
+
         User user = this.userService.findUserByUsername(loggedUser);
         model.addAttribute("loggedUser", user);
 
+
         List<Question> sortedQuestions = questionService.getSortedQuestionsByFollowing(user);
-        List<Question> otherQuestions = (List<Question>) questionService.findAll(0, 5);
+        List<Question> otherQuestions = new ArrayList<>(questionService.findAll());
 
-        // Supprimez les questions déjà triées de la liste des autres questions
         otherQuestions.removeAll(sortedQuestions);
-
-        // Ajoutez les autres questions après les questions triées
         sortedQuestions.addAll(otherQuestions);
 
-        Page<Question> questions = new PageImpl<>(sortedQuestions, PageRequest.of(page, 5), sortedQuestions.size());
+        Page<Question> questions = paginate(sortedQuestions, page, pageSize);
         model.addAttribute("listQuestions", questions.getContent());
         model.addAttribute("pages", new int[questions.getTotalPages()]);
         model.addAttribute("currentPage", page);
+        model.addAttribute("isTag", false);
+        model.addAttribute("isSearch", false);
         return "home-page-questions";
     }
 
