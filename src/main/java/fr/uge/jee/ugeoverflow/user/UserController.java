@@ -225,10 +225,10 @@ public class UserController {
 
 
     @PostMapping("/homepage/users")
-    public String homepageUsers(@RequestParam(name = "loggedUser") String loggedUser,
-                                   Model model){
+    public String homepageUsers(Model model){
 
         List<User> users = this.userService.getAllUsers();
+        String loggedUser = authenticationService.getLoggedUser().getUsername();
         User user = users.stream().filter(x -> x.getUsername().equals(loggedUser)).findFirst().orElse(null);
         model.addAttribute("loggedUser", user);
         if(!users.isEmpty()){
@@ -238,9 +238,8 @@ public class UserController {
     }
 
     @PostMapping("/homepage/tags")
-    public String homepageTags(@RequestParam(name = "loggedUser") String loggedUser,
-                               Model model){
-        User user = this.userService.findUserByUsername(loggedUser);
+    public String homepageTags(Model model){
+        User user = this.authenticationService.getLoggedUser();
         model.addAttribute("loggedUser", user);
         return "home-page-tags";
     }

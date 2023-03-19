@@ -1,9 +1,8 @@
 package fr.uge.jee.ugeoverflow.publishing.answer;
 
-import fr.uge.jee.ugeoverflow.publishing.answer.Answer;
-import fr.uge.jee.ugeoverflow.publishing.answer.AnswerRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 
@@ -24,5 +23,10 @@ public class AnswerService {
 
     public Answer findAnswerById(Long idAnswer){
         return this.answerRepository.findAnswerById(idAnswer);
+    }
+
+    @Transactional
+    public void deleteAnswerById(Long idAnswer){
+        this.answerRepository.deleteAnswerById(idAnswer);
     }
 }

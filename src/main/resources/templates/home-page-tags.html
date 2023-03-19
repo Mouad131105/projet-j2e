@@ -15,7 +15,6 @@
     <div class="container-fluid bg-light">
         <div class="d-flex justify-content-center">
             <form th:action="@{/users/homepage/questions}" method="post">
-                <input type="hidden" name="loggedUser" th:value="${loggedUser.username}">
                 <button type="submit" class="btn btn-info me-2" id="button1">Questions</button>
             </form>
             <form th:action="@{/users/homepage/users}" method="post">
@@ -44,7 +43,6 @@
                         </div>
                     </li>
                 </ul>
-                <input type="hidden" th:name="loggedUser" th:value="${loggedUser.username}" />
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>

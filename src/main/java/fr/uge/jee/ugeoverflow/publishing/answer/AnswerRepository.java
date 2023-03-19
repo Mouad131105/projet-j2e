@@ -9,4 +9,5 @@ import java.util.List;
 public interface AnswerRepository extends CrudRepository<Answer, Long> {
     List<Answer> findAllByParentQuestionId(Long parentQuestionId);
     Answer findAnswerById(Long id);
+    void deleteAnswerById(Long id);
 }
