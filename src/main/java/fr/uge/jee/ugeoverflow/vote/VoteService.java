@@ -1,6 +1,8 @@
 package fr.uge.jee.ugeoverflow.vote;
 
 
+import fr.uge.jee.ugeoverflow.publishing.answer.Answer;
+import fr.uge.jee.ugeoverflow.user.User;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -26,5 +28,9 @@ public class VoteService {
 
     public List<Vote> findAllByAnswer_ParentQuestion_Id(Long questionId){
         return this.voteRepository.findAllByAnswer_ParentQuestion_Id(questionId);
+    }
+
+    public Vote findByAnswerAndAndUserAndVoteType(Answer answer, User user, VoteType voteType){
+        return this.voteRepository.findByAnswerAndAndUserAndVoteType(answer, user, voteType);
     }
 }

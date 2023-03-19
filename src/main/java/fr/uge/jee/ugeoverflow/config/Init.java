@@ -81,7 +81,13 @@ public class Init {
         user7.setEmail("laurine@gmail.com");
         user7.setPassword(passwordEncoder.encode("Laurine123!"));
         user7.setRole(Role.AUTHENTIFIED);*/
-        List<User> predefinedUsers = Arrays.asList(user1, user2, user3, user4);
+        User user8 = new User();
+        user8.setUsername("Arnaud");
+        user8.setEmail("arnaud@gmail.com");
+        user8.setPassword(passwordEncoder.encode("arnaud"));
+        user8.setRole(Role.AUTHENTIFIED);
+
+        List<User> predefinedUsers = Arrays.asList(user1, user2, user3, user4, user8);
         this.userService.saveAll(predefinedUsers);
 
 

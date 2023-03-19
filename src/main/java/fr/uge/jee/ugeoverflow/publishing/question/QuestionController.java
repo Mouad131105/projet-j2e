@@ -1,7 +1,6 @@
 package fr.uge.jee.ugeoverflow.publishing.question;
 
 import fr.uge.jee.ugeoverflow.authentication.AuthenticationService;
-import fr.uge.jee.ugeoverflow.note.Note;
 import fr.uge.jee.ugeoverflow.publishing.Tag;
 import fr.uge.jee.ugeoverflow.publishing.answer.Answer;
 import fr.uge.jee.ugeoverflow.publishing.comment.CommentQuestion;
@@ -9,8 +8,6 @@ import fr.uge.jee.ugeoverflow.publishing.answer.AnswerService;
 import fr.uge.jee.ugeoverflow.user.User;
 import fr.uge.jee.ugeoverflow.publishing.comment.CommentQuestionService;
 import fr.uge.jee.ugeoverflow.user.UserService;
-
-import fr.uge.jee.ugeoverflow.vote.Vote;
 import fr.uge.jee.ugeoverflow.vote.VoteService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -78,34 +75,39 @@ public class QuestionController {
         return "question-profile";
     }
 
-    private void sortAnswers(User user, List<Answer> answers){
-        List<Answer> sortedAnswers = new ArrayList<>();
-        Map<Integer, List<User>> map = getsortedFollowers(user);
+    private List<Answer> sortAnswers(User user, List<Answer> answers){
 
-        Set<User> followedUsers = map.values().stream().flatMap(List::stream).collect(Collectors.toSet());
-
-        /*for (Answer answer : answers){
-
-        }*/
+        if(user.getFollowedUsers().isEmpty()){
+            return answers.stream().sorted(Comparator.comparingLong(Answer::getScore)).collect(Collectors.toList());
+        }else{
+            Map<User, Integer> mapUser = getsortedFollowers(user);
+            Map<Answer, Integer> mapAnswer = new HashMap<>();
 
 
-        List<User> sortedUsers = map.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey())
-                .map(x -> x.getValue())
-                .flatMap(List::stream)
-                .collect(Collectors.toList());
+            for (Answer answer : answers){
+                if(mapUser.containsKey(answer.getAuthor())){
+                    mapAnswer.put(answer, mapUser.get(answer.getAuthor()));
+                }else{
+                    mapAnswer.put(answer, mapUser.size()+1);
+                }
+            }
 
-        sortedUsers.stream();
+            List<Answer> sortedAnswers = mapAnswer.entrySet().stream()
+                    .sorted(Map.Entry.comparingByValue())
+                    .map(x -> x.getKey())
+                    .collect(Collectors.toList());
+            return sortedAnswers;
+        }
 
     }
 
-    private Map<Integer, List<User>> getsortedFollowers(User user){
-        Map<Integer, List<User>> sortedUsers = new HashMap<>();
+    private Map<User, Integer> getsortedFollowers(User user){
+        Map<User, Integer> sortedUsers = new HashMap<>();
         Set<User> visited = new HashSet<>();
         visited.add(user);
         List<User> list = new ArrayList<>();
         list.add(user);
-        int depth = 1;
+        int index = 1;
 
         while (!list.isEmpty()) {
             List<User> follower = new ArrayList<>();
@@ -121,9 +123,11 @@ public class QuestionController {
                 follower.add(currentUser);
             }
             if (!follower.isEmpty()) {
-                sortedUsers.put(depth, follower);
+                for(User userFollow : follower){
+                    sortedUsers.put(userFollow, index);
+                }
             }
-            depth++;
+            index++;
             list = nextDepth;
         }
         return sortedUsers;
@@ -144,7 +148,7 @@ public class QuestionController {
         model.addAttribute("question", question);
         model.addAttribute("commentsQuestion", commentQuestions);
         model.addAttribute("loggedUser", loggedUser.getUsername());
-        model.addAttribute("answers", answers);
+        model.addAttribute("answers", sortAnswers(loggedUser, answers));
 
         return "question-profile";
     }
