@@ -1,3 +1,13 @@
+<h1>Informations</h1>
+
+<h2>Membres</h2>
+<ul>
+    <li>AOUIDA Mouad : mouad.aouida@edu.univ-eiffel.fr</li>
+    <li>ARAVINDAN David : david.aravindan@edu.univ-eiffel.fr</li>    
+    <li>BURIN Natan : natan.burin@edu.univ-eiffel.fr</li>
+    <li>JAAFRI Amyr (Responsable) : amyr.jaafri@edu.univ-eiffel.fr</li>
+</ul>
+
 <h1>Mise en place</h1>
 
 <h2>Pré-requis</h2>
@@ -70,3 +80,4 @@ Si le commit affecte la globalité du code ou est difficile à définir, il peut
 <h3>Sujet</h3>
 
 Décrire en quelques mots le/les changements opérés, à l'impératif, sans majuscules au début, et sans "." à la fin.
+
