@@ -1,17 +1,19 @@
 package fr.uge.jee.ugeoverflow.publishing.answer;
 
 
-import fr.uge.jee.ugeoverflow.publishing.answer.Answer;
 import fr.uge.jee.ugeoverflow.publishing.comment.CommentQuestionService;
 import fr.uge.jee.ugeoverflow.publishing.question.QuestionService;
-import fr.uge.jee.ugeoverflow.publishing.answer.AnswerService;
 import fr.uge.jee.ugeoverflow.user.UserService;
+import fr.uge.jee.ugeoverflow.vote.Vote;
+import fr.uge.jee.ugeoverflow.vote.VoteService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import javax.validation.Valid;
 
 @Controller
@@ -22,13 +24,16 @@ public class AnswerController {
     private final UserService userService;
     private final CommentQuestionService commentQuestionService;
     private final AnswerService answerService;
+    private final VoteService voteService;
 
     public AnswerController(QuestionService questionService, UserService userService,
-                              CommentQuestionService commentQuestionService, AnswerService answerService) {
+                            CommentQuestionService commentQuestionService, AnswerService answerService,
+                            VoteService voteService) {
         this.questionService = questionService;
         this.userService = userService;
         this.commentQuestionService = commentQuestionService;
         this.answerService = answerService;
+        this.voteService = voteService;
     }
 
     @PostMapping("/add")
@@ -37,8 +42,15 @@ public class AnswerController {
                             Model model) {
         answerService.save(answer);
         Long parentQuestionId = answer.getParentQuestion().getId();
-        String loggedUser = answer.getAuthor().getUsername();
 
-        return "redirect:/question/profile/" + parentQuestionId + "?loggedUser=" + loggedUser;
+        return "redirect:/question/profile/" + parentQuestionId;
+    }
+    @PostMapping("/delete")
+    public String deleteAnswer(@RequestParam Long idAnswer){
+        Answer answer = answerService.findAnswerById(idAnswer);
+        this.voteService.deleteAllByAnswerId(idAnswer);
+        long parentQuestionId = answer.getParentQuestion().getId();
+        answerService.deleteAnswerById(idAnswer);
+        return "redirect:/question/profile/" + parentQuestionId;
     }
 }

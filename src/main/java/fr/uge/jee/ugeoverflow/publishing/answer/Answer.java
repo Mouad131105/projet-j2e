@@ -43,7 +43,7 @@ public class Answer {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime date = LocalDateTime.now();
 
-    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "Comment_Id")
     private List<CommentAnswer> commentAnswers = new ArrayList<>();
 

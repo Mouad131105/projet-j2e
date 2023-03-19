@@ -37,7 +37,6 @@
 
     <form th:action="@{/comment/question}" th:object="${commentQuestion}" method="post">
         <input type="hidden" th:name="author.username" th:value="${loggedUser}">
-        <input type="hidden" th:name="loggedUser" th:value="${loggedUser}">
         <input type="hidden" th:name="parentQuestion.id" th:value="${question.id}">
         <div class="form-group">
             <textarea class="form-control" id="content" name="content" rows="3" th:field="*{content}"></textarea>
@@ -68,6 +67,12 @@
                         <div>
                             <p th:text="${answer.getContent()}"></p>
                         </div>
+                        <div th:if="${answer.getAuthor().getUsername() == loggedUser}">
+                            <form th:action="@{/answer/delete}" method="post">
+                                <input type="hidden" th:name="idAnswer" th:value="${answer.getId()}">
+                                <button type="submit" class="btn btn-link">x</button>
+                            </form>
+                        </div>
                         <div>
                             <form th:action="@{/vote/add/up}" method="post">
                                 <input type="hidden" th:name="answerId" th:value="${answer.getId()}">
@@ -81,7 +86,7 @@
                         </div>
                     </div>
 
-                    <div>
+                    <!-- <div>
                         <form th:action="@{/comment/answer}" th:object="${commentAnswer}" method="post">
                             <input type="hidden" th:name="author.username" th:value="${loggedUser}">
                             <input type="hidden" th:name="parentAnswer.id" th:value="${answer.id}">
@@ -90,11 +95,11 @@
                             </div>
                             <button type="submit" class="btn btn-primary">Add Comment</button>
                         </form>
-                    </div>
+                    </div> -->
 
                      <!-- Affiche les commentaires des answers -->
 
-                    <div th:if="${!answer.getCommentAnswers().isEmpty()}">
+                    <!-- <div th:if="${!answer.getCommentAnswers().isEmpty()}">
                         <table>
                             <tbody>
                             <tr th:each="comment : ${answer.getCommentAnswers()}">
@@ -107,7 +112,7 @@
                     </div>
                     <div th:if="${answer.getCommentAnswers().isEmpty()}">
                         <p>Pas de commentaire</p>
-                    </div>
+                    </div> -->
                 </li>
             </ul>
         </div>
