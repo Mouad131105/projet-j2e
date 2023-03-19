@@ -223,7 +223,6 @@ public class UserController {
         return "home-page-questions";
     }
 
-
     @PostMapping("/homepage/users")
     public String homepageUsers(Model model){
 
