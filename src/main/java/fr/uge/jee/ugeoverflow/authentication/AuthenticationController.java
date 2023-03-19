@@ -105,7 +105,7 @@ public class AuthenticationController {
             model.addAttribute("registrationError", "This email is already used");
             return "registration-form";
         }
-        //user.setConfidenceScore(Collections.emptySet());
+        user.setConfidenceScore(Collections.emptySet());
         user.setFollowedUsers(Collections.emptySet());
         user.setRole(Role.AUTHENTIFIED);
         this.authenticationService.saveUser(user);

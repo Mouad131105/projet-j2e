@@ -66,21 +66,6 @@ public class Init {
         user4.setEmail("louise@gmail.com");
         user4.setPassword(passwordEncoder.encode("Louise123!"));
         user4.setRole(Role.AUTHENTIFIED);
-        /*User user5 = new User();
-        user5.setUsername("Sascha");
-        user5.setEmail("sascha@gmail.com");
-        user5.setPassword(passwordEncoder.encode("Sascha123!"));
-        user5.setRole(Role.AUTHENTIFIED);
-        User user6 = new User();
-        user6.setUsername("Pauline");
-        user6.setEmail("pauline@gmail.com");
-        user6.setPassword(passwordEncoder.encode("Pauline123!"));
-        user6.setRole(Role.AUTHENTIFIED);
-        User user7 = new User();
-        user7.setUsername("Laurine");
-        user7.setEmail("laurine@gmail.com");
-        user7.setPassword(passwordEncoder.encode("Laurine123!"));
-        user7.setRole(Role.AUTHENTIFIED);*/
         User user8 = new User();
         user8.setUsername("Arnaud");
         user8.setEmail("arnaud@gmail.com");

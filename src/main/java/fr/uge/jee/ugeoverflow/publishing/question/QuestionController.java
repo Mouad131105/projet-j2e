@@ -210,26 +210,6 @@ public class QuestionController {
         return "home-page-questions";
     }
 
-    /*@PostMapping("/search")
-    public String searchQuestion(Model model,
-                                 @RequestParam(name = "page", defaultValue = "0") int page,
-                                 @RequestParam(name = "keyword", defaultValue = "") String keyword,
-                                 @RequestParam(name = "loggedUser") String loggedUser){
-        List<User> users = this.userService.getAllUsers();
-        if(!users.isEmpty()){
-            model.addAttribute("allUsers",users);
-        }
-        User user = this.userService.findUserByUsername(loggedUser);
-        model.addAttribute("loggedUser", user);
-        Page<Question> questions = questionService.findByTopicContains(keyword,PageRequest.of(page, 5));
-        model.addAttribute("listQuestions", questions.getContent());
-        model.addAttribute("pages", new int[questions.getTotalPages()]);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("isTag", false);
-        model.addAttribute("isSearch", false);
-        return "home-page-questions";
-    }*/
-
     @RequestMapping(value = "/search", method = {RequestMethod.GET, RequestMethod.POST})
     public String searchQuestion(Model model,
                                  @RequestParam(name = "page", defaultValue = "0") int page,
@@ -258,32 +238,6 @@ public class QuestionController {
         model.addAttribute("keyword", keyword);
         return "home-page-questions";
     }
-
-    /*@GetMapping("/tag")
-    public String processTags(Model model,
-                              @RequestParam(name = "selectedTags") String selectedTags,
-                              @RequestParam(name = "page", defaultValue = "0") int page,
-                              @RequestParam(name = "loggedUser") String loggedUser) {
-        List<User> users = this.userService.getAllUsers();
-        if(!users.isEmpty()){
-            model.addAttribute("allUsers",users);
-        }
-        User user = this.userService.findUserByUsername(loggedUser);
-        model.addAttribute("loggedUser", user);
-
-        String[] tagsArray = selectedTags.split(",");
-        List<String> tagsList = Arrays.asList(tagsArray);
-        List<Question> allQuestions = new ArrayList<>();
-        for (String tag : tagsList) {
-            Page<Question> questions = questionService.findByTag(tag, PageRequest.of(page, 5));
-            allQuestions.addAll(questions.getContent());
-        }
-        Page<Question> questions = new PageImpl<>(allQuestions,PageRequest.of(page, 5), allQuestions.size());
-        model.addAttribute("listQuestions", questions.getContent());
-        model.addAttribute("pages", new int[questions.getTotalPages()]);
-        model.addAttribute("currentPage", page);
-        return "home-page-questions";
-    }*/
 
     @GetMapping("/tag")
     public String processTags(Model model,

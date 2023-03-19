@@ -71,19 +71,4 @@ public class UserService {
     public List<User> findAllUsers() {
         return this.userRepository.findAll();
     }
-
-    /*@Transactional
-    public Set<User> findAllFollowedUsersFromUser(String username){
-        Set<User> test = this.userRepository.findAllFollowedUsersFromUser(username);
-        Hibernate.initialize(test);
-        return test;
-    }
-
-    @Transactional
-    public Set<User> findAllFollowedUsersFromUser(String username){
-        User user = this.userRepository.findUserByUsername(username);
-        Set<User> followeduser = user.getFollowedUsers();
-        Hibernate.initialize(followeduser);
-        return followeduser;
-    }*/
 }

@@ -136,27 +136,6 @@ public class UserController {
         return "login-form";
     }
 
-    /*
-    @PostMapping("/login")
-    public String processLogin(@RequestParam(name = "username") @NotEmpty String username,
-                              @RequestParam(name = "password") @NotEmpty String password,
-                               Model model) {
-
-        User user = this.userService.findUserByUsername(username);
-        if (user != null && user.getPassword().equals(password)) {
-            model.addAttribute("loggedUser", user);
-            Page<Question> questions = questionService.findAll(0, 5);
-            model.addAttribute("listQuestions", questions.getContent());
-            model.addAttribute("pages", new int[questions.getTotalPages()]);
-            model.addAttribute("currentPage", 0);
-            return "home-page-questions";
-        }
-
-        model.addAttribute("loginError", "Username or password is incorrect");
-
-        return "login-form";
-    }*/
-
     @PostMapping("/login")
     public String processLogin(@RequestParam(name = "username") @NotEmpty String username,
                                @RequestParam(name = "password") @NotEmpty String password,
