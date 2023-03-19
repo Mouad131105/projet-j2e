@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="/webjars/bootstrap/5.1.2/css/bootstrap.min.css"/>
+    <script>
+        function checkPassword() {
+            var regex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
+            if(password == "" || confirmPassword == "") {
+                document.getElementById("passwordError").innerHTML = "Password cannot be empty";
+                return false;
+            }
+            if (password !== confirmPassword) {
+                document.getElementById("passwordError").innerHTML = "Confirm password cannot be different";
+                return false;
+            }
+            if (!password.match(regex)) {
+                document.getElementById("passwordError").innerHTML = "The password must contain at least eight characters, such that at least : " +
+                    "<ul><li> one uppercase </li>" +
+                    "<li>one lowercase</li>" +
+                    "<li>one special character</li>" +
+                    "<li>one digit</li></ul>"
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+<div class="h-100 d-flex align-items-center justify-content-center">
+    <div class="content">
+        <h3>User informations</h3>
+        <hr />
+        <div class="form-group">
+            <label for="email">Username</label>
+            <input type="email" readonly class="form-control" id="username" placeholder="Username" th:value="${username}">
+        </div>
+        <form th:action="@{/authentication/settings/email}" method="post">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email" th:value="${email}">
+            </div>
+            <div th:if="${updateEmailError != null}">
+                <small class="text-danger" th:text="${updateEmailError}"/>
+            </div>
+            <div th:if="${updateEmailSuccess != null}">
+                <small class="text-success" th:text="${updateEmailSuccess}"/>
+            </div>
+            <hr />
+            <button type="submit" class="btn btn-primary">Update email</button>
+        </form>
+        <form onsubmit="return checkPassword()" th:action="@{/authentication/settings/password}" method="post">
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Password</label>
+                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm password" required>
+            </div>
+            <small>
+                <span class="text-danger" id="passwordError"/>
+            </small>
+            <div th:if="${updatePasswordError != null}">
+                <small class="text-danger" th:text="${updatePasswordError}"/>
+            </div>
+            <div th:if="${updatePasswordSuccess != null}">
+                <small class="text-success" th:text="${updatePasswordSuccess}"/>
+            </div>
+            <hr />
+            <div>
+                <button type="submit" class="btn btn-primary">Update password</button>
+            </div>
+        </form>
+        <a th:href="@{/users/homepage/questions}">Homepage</a>
+    </div>
+</div>
+</body>
+</html>

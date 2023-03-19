@@ -9,7 +9,6 @@
 
     <div>
         <p th:text="${'Role : ' + user.getRole()}"> </p>
-        <p th:text="${'Confidence score : ' + user.confidenceScore}"> </p>
     </div>
 
 
@@ -22,7 +21,7 @@
             </thead>
             <tbody>
             <tr th:if="${questions.isEmpty()}">
-                <td colspan="2"> This user as not asked any questions </td>
+                <td colspan="2"> This user has not asked any questions </td>
             </tr>
             <tr th:each="question : ${questions}">
                 <td title="Tags" th:each="tag : ${question.tags}">
@@ -44,26 +43,18 @@
 
 
     <div>
-        <form th:action="@{/registration/follow}" method="post" id="followForm" onsubmit="return false;">
+        <form th:action="@{/registration/follow}" method="post" id="followForm">
             <input type="hidden"  name="userFollow" th:value="${user.username}">
             <input type="hidden"  name="loggedUser" th:value="${loggedUser.username}">
-            <!--<input type="submit" th:value="${isFollow == true} ? 'UNFOLLOW' : 'FOLLOW'">-->
-            <button onclick="submitForm()" th:text="${isFollow == true} ? 'UNFOLLOW' : 'FOLLOW'" th:disabled="${user.username == loggedUser.username}"></button>
+            <button type="submit" th:text="${isFollow == true} ? 'UNFOLLOW' : 'FOLLOW'" th:disabled="${user.username == loggedUser.username}"></button>
         </form>
     </div>
 
 
-    <script>
-        const followForm = document.querySelector("#followForm");
+    <div th:disabled="${isFollow == false}">
+        <a th:href="@{/users/homepage/questions}">Homepage</a>
 
-        function submitForm() {
-            followForm.submit();
-        }
-    </script>
+    </div>
 
-    <!--
-    target="dummyframe"
-    <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
-    -->
 
 </html>

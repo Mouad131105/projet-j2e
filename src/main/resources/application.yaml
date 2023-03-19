@@ -1,16 +1,24 @@
 spring:
+  main:
+    allow-circular-references: true
   h2:
-
     console:
       enabled: true
       path: /h2
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     open-in-view: false
+
   datasource:
     url: jdbc:h2:tcp://localhost/~/h2DB
     username: sa
     password:
     driverClassName: org.h2.Driver
+
+# Admin user info
+admin:
+ username: admin
+ password: admin
+ email: admin@univ-eiffel.com

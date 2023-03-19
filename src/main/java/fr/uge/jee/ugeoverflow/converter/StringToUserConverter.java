@@ -1,7 +1,7 @@
 package fr.uge.jee.ugeoverflow.converter;
 
-import fr.uge.jee.ugeoverflow.entities.Role;
-import fr.uge.jee.ugeoverflow.entities.User;
+import fr.uge.jee.ugeoverflow.user.Role;
+import fr.uge.jee.ugeoverflow.user.User;
 import org.springframework.core.convert.converter.Converter;
 
 

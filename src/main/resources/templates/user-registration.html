@@ -2,11 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Successful registration</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.1.2/css/bootstrap.min.css"/>
 </head>
 <body>
-    <b><p th:text="${'The profile ' + user.username + ' has been saved'}"/></b>
-    <a th:href="@{/registration/login}">Sign in</a>
-
+    <b><p class="text-success" th:text="${'The profile ' + user.username + ' has been saved'}"/></b>
+    <a th:href="@{/authentication/login/}">Sign in</a>
 </body>
 </html>

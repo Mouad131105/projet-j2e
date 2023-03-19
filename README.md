@@ -3,7 +3,6 @@
 <h2>Pré-requis</h2>
 
 <ul>
-    <li>Tomcat 10.0;</li>
     <li>JDK 8/11;</li>
     <li>IntelliJ (SonarLint).</li>
 </ul>
@@ -18,6 +17,8 @@ Exécuter, dans le dossier `src\main\resources` où l'archive `h2-1.4.200.jar` e
 
 Si tout va bien, cela une fenêtre sur la console H2 doit s'ouvrir. Si ce n'est pas le cas, vous pouvez accéder à la console en allant sur [http://localhost:8082](http://localhost:8082/) .
 
+<u>Remarque :</u> Si vous rencontrez un problème pour vous connecter à la base H2, essayez de télécharger à nouveau le jar en allant sur [https://mvnrepository.com/artifact/com.h2database/h2/2.1.214](https://mvnrepository.com/artifact/com.h2database/h2/2.1.214) .
+
 <h3>Configurer le serveur et la console H2 dans IntelliJ</h3>
 
 A partir de la fenêtre `Database` de votre interface `IntelliJ`, sélectionnez `New [+] > Data Source > H2`. Puis, dans `Data Sources > General` modifier le champ `URL` par `jdbc:h2:tcp://localhost/~/h2DB`. Pour finir, cliquez sur `Apply`. Désormais, vous pouvez visualiser le contenu de la base et l'interroger. 
@@ -26,7 +27,7 @@ A partir de la fenêtre `Database` de votre interface `IntelliJ`, sélectionnez 
 
 Configurer le fichier démarrage `src/main/java/fr/uge/jee/ugeoverflow/Application.java` dans l'interface `Edit configuration` de `IntelliJ`.
 
-Lorsque l'application est démarré, vous pouvez accéder à l'interface de `Swagger UI` en allant sur [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html). 
+Lorsque l'application est démarré, vous pouvez accéder à l'interface de `Swagger UI` en allant sur [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui/index.html). 
 Cette interface est utile pour tester vos **API REST** et les documenter.
 
 <h3>Documentation</h3>
